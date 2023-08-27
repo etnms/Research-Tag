@@ -14,7 +14,13 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$APP/*", "$DESKTOP/*", "$DOCUMENT/**"]
+        "writeFile": true,
+        "scope": [
+          "$APP/*",
+          "$DESKTOP/*",
+          "$DOCUMENT/**"
+        ],
+        "readFile": true
       },
       "path": {
         "all": true
@@ -22,6 +28,9 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "dialog": {
+        "all": true
       }
     },
     "bundle": {

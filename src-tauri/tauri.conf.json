@@ -18,7 +18,9 @@
         "scope": [
           "$APP/*",
           "$DESKTOP/*",
-          "$DOCUMENT/**"
+          "$DOCUMENT/**",
+          "$APPDATA/**",
+          "$APPLOCALDATA/**"
         ],
         "readFile": true
       },

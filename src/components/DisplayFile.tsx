@@ -3,7 +3,7 @@ import Line from './Line';
 import { LinesObject } from '../types/LinesObject';
 
 interface DisplayFileProps {
-    tagList: string[],
+    tagList: Tag[],
     linesObject: LinesObject[],
     setLinesObject: Function,
     saveJSON: Function

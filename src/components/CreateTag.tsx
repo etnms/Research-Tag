@@ -4,13 +4,33 @@ import { open, save } from '@tauri-apps/api/dialog';
 import { documentDir, dirname } from '@tauri-apps/api/path';
 
 interface CreateTagProps {
-    tagList: string[],
+    tagList: Tag[],
     setTaglist: Function,
 }
 const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
 
+    const colorList = [
+        "#800000",
+        "#87CEEB",
+        "#32CD32",
+        "#FFD700",
+        "#FF4500",
+        "#4B0082",
+        "#FA8072",
+        "#D2691E",
+        "#708090",
+        "#000033",
+        "#FFF5E1",
+        "#40E0D0",
+        "#00008B",
+        "#E5E4E2",
+        "#CD7F32",
+      ];
     const addTag = () => {
-        const newTag: string = (document.querySelector('input[name="tag-input"]') as HTMLInputElement).value;
+        const name: string = (document.querySelector('input[name="tag-input"]') as HTMLInputElement).value;
+        const color: string = colorList[tagList.length];
+        const index : number = tagList.length;
+        const newTag = {name, color, index}
         setTaglist([...tagList, newTag])
     }
 
@@ -28,7 +48,7 @@ const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
         setTaglist(content);
     }
 
-    const saveTagList = async (taglist: string[]) => {
+    const saveTagList = async (taglist: Tag[]) => {
         const filePath: string | null = await save({
             filters: [{
                 name: 'Tag list',

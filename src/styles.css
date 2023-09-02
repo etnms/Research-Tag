@@ -6,6 +6,9 @@
 
   color: #0f0f0f;
   background-color: #f6f6f6;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,3 +17,7 @@
   -webkit-text-size-adjust: 100%;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}

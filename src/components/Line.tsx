@@ -6,14 +6,14 @@ interface LineProps {
   line: string;
   tags: string[];
   index: number;
-  addTagsTest: Function;
+  addTag: Function;
 }
 const Line: React.FC<LineProps> = ({
   tagList,
   line,
   tags,
   index,
-  addTagsTest,
+  addTag,
 }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
 
@@ -23,6 +23,7 @@ const Line: React.FC<LineProps> = ({
         `select[name='select-tag-${index}'`
       ) as HTMLSelectElement
     ).value;
+    console.log(tagValue);
     setSelectedTag(tagValue);
   };
 
@@ -36,6 +37,10 @@ const Line: React.FC<LineProps> = ({
     return "";
   };
 
+  const generateRandomId = () => {
+    return Math.random();
+  }
+
   return (
     <li key={index} className={styles.line}>
       <p className={styles.text}>{line}</p>
@@ -44,7 +49,7 @@ const Line: React.FC<LineProps> = ({
           {tags.map((tag: string) => (
             <span
               className={styles.tag}
-              key={`${tag + line}`}
+              key={`${tag}-info-${index}-${generateRandomId()}`}
               style={{ backgroundColor: `${getTagColor(tag)}` }}
             >
               {tag}
@@ -61,7 +66,7 @@ const Line: React.FC<LineProps> = ({
             </option>
           ))}
         </select>
-        <button onClick={() => addTagsTest(index, selectedTag)}>Add tag</button>
+        <button onClick={() => addTag(index, selectedTag)}>Add tag</button>
       </div>
     </li>
   );

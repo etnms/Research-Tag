@@ -7,6 +7,7 @@ import {
   exists,
   readTextFile,
   writeFile,
+  writeTextFile,
 } from "@tauri-apps/api/fs";
 import { dirname, documentDir } from "@tauri-apps/api/path";
 import CreateTag from "./components/CreateTag";
@@ -37,17 +38,14 @@ function App() {
 
   const createDataFile = async (lineObject: LinesObject[]) => {
     try {
-      const path = await save(
-        {
-          filters: [
-            {
-              name: "Tagger data file",
-              extensions: ["json"],
-            },
-          ],
-        }
-
-      );
+      const path = await save({
+        filters: [
+          {
+            name: "Tagger data file",
+            extensions: ["json"],
+          },
+        ],
+      });
       await writeFile({
         contents: `${JSON.stringify(lineObject, null, 2)}`,
         path: path!,
@@ -66,11 +64,16 @@ function App() {
   };
 
   const writeJSONFile = async (lineObject: LinesObject[]) => {
-    const dir = await dirname(filepath!);
-    await writeFile({
-      contents: `${JSON.stringify(lineObject, null, 2)}`,
-      path: `${dir}/${fileName}.json`,
-    });
+    //const dir = await dirname(filepath!);
+    const filePath = `TaggerAppData/data/${fileName}.json`;
+    await writeFile(
+      {
+        path: filePath,
+        // path: `${dir}/${fileName}.json`,
+        contents: `${JSON.stringify(lineObject, null, 2)}`,
+      },
+      { dir: BaseDirectory.Document }
+    );
   };
 
   const saveJSON = () => {

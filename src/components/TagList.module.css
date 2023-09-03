@@ -1,4 +1,12 @@
+.list {
+    display: flex;
+    gap: 0.2rem;
+}
 .tag {
     border-radius: 0.4rem;
     padding: 0.2rem;
+    text-align: center;
+    list-style: none;
+    min-width: 4rem;
+    padding: 0.2rem 0.5rem;
 }

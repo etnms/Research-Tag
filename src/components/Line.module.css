@@ -7,6 +7,7 @@
   font-size: 1.2rem;
   list-style: none;
 }
+
 .text {
 }
 
@@ -23,4 +24,7 @@
 
 .tag {
     margin: 0rem 0.2rem;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    text-align: center;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Line from './Line';
 import { LinesObject } from '../types/LinesObject';
+import styles from './DisplayFile.module.css';
 
 interface DisplayFileProps {
     tagList: Tag[],
@@ -11,7 +12,7 @@ interface DisplayFileProps {
 
 const DisplayFile: React.FC<DisplayFileProps> = ({ linesObject, tagList, setLinesObject, saveJSON }) => {
 
-    const addTagsTest = (index: number, tag: string) => {
+    const addTag = (index: number, tag: string) => {
 
         // Get copy of array
         const updatedLines: LinesObject[] = [...linesObject];
@@ -31,9 +32,9 @@ const DisplayFile: React.FC<DisplayFileProps> = ({ linesObject, tagList, setLine
         saveJSON();
     }
     return (
-        <div>
+        <div className={styles['item-list']}>
             {linesObject.map((lineObject: LinesObject) => (
-                <Line tagList={tagList} line={lineObject.line} tags={lineObject.tags} index={lineObject.index} addTagsTest={addTagsTest} />
+                <Line tagList={tagList} line={lineObject.line} tags={lineObject.tags} index={lineObject.index} addTag={addTag} />
             ))}
         </div>
     );

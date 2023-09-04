@@ -1,4 +1,5 @@
 @use "../styles/variables";
+@use "../styles/mixin";
 
 .line {
   border-radius: 1rem;
@@ -18,15 +19,41 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin: 0.2rem;
 }
 
 .tag-list {
-
+  border: 1px solid black;
+  padding: 0.5rem 0.3rem;
+  border-radius: 6px;
 }
 
 .tag {
-    margin: 0rem 0.2rem;
-    padding: 0.3rem;
-    border-radius: 0.5rem;
-    text-align: center;
+  margin: 0rem 0.2rem;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.select {
+  font-size: 1.2rem;
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 6px;
+  padding: 0 1em 0 0;
+  margin: 0.2rem;
+  padding: 0.2rem;
+  min-width: 20%;
+  outline: none;
+  text-align: center
+}
+
+.select:focus {
+  box-shadow: 1px 1px 2px 1px #afafaf;
+}
+
+
+.button {
+  @include mixin.button;
 }

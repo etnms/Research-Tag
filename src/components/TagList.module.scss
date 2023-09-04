@@ -1,12 +1,21 @@
+@use "../styles/mixin";
+@use "../styles/variables";
+
 .list {
-    display: flex;
-    gap: 0.2rem;
+  @include mixin.flex-align-center-col;
+  gap: 0.2rem;
+  background-color: #f2f2f2;
+  width: 80%;
+  border-radius: 12px;
+  padding: 0.3rem;
+  box-shadow: variables.$elevation1;
 }
+
 .tag {
-    border-radius: 0.4rem;
-    padding: 0.2rem;
-    text-align: center;
-    list-style: none;
-    min-width: 4rem;
-    padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  padding: 0.2rem;
+  text-align: center;
+  list-style: none;
+  min-width: 4rem;
+  padding: 0.2rem 0.5rem;
 }

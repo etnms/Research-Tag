@@ -1,7 +1,23 @@
 @use '../styles/variables';
+@use '../styles/mixin';
 
 .menu {
     background-color: variables.$primary;
     width: 20vw;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    color: white;
+}
+
+.subtitle {
+    color: white;
+}
+
+.text {
+    color: white;
 }

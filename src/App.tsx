@@ -144,7 +144,7 @@ function App() {
 
   return (
     <div className={styles["app-wrapper"]}>
-      <Menu />
+      <Menu tagList={tagList} projectName={fileName!} />
       <div className={styles["container-wrapper"]}>
         <div className={styles.container}>
           <Title />
@@ -162,11 +162,8 @@ function App() {
               Create Data File
             </button>
           </div>
-          <p>{fileName}</p>
           <TagInfo linesObject={linesObject} />
           <CreateTag tagList={tagList} setTaglist={setTagList} />
-          <TagList tagList={tagList} />
-
           <DisplayFile
             tagList={tagList}
             linesObject={linesObject}

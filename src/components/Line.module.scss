@@ -1,7 +1,9 @@
+@use "../styles/variables";
+
 .line {
   border-radius: 1rem;
   background-color: white;
-  box-shadow: 0px 2px 4px -1px black;
+  box-shadow: variables.$elevation1;
   margin: 0.3rem 0.5rem;
   padding: 0.3rem;
   font-size: 1.2rem;

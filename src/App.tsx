@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import "./App.css";
 import DisplayFile from "./components/DisplayFile";
 import {
   BaseDirectory,
@@ -15,6 +14,9 @@ import TagList from "./components/TagList";
 import { LinesObject } from "./types/LinesObject";
 import { open, save, confirm } from "@tauri-apps/api/dialog";
 import Title from "./components/Title";
+import TagInfo from "./components/TagInfo";
+import styles from "./App.module.scss";
+import Menu from "./components/Menu";
 
 function App() {
   const [filepath, setFilePath] = useState<string>();
@@ -141,22 +143,38 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <Title />
-      <button onClick={() => createNewFile()}>New file</button>
-      <button onClick={() => openJSONFile()}>Open JSON file</button>
-      <p>{fileName}</p>
-      <CreateTag tagList={tagList} setTaglist={setTagList} />
-      <TagList tagList={tagList} />
-      <button onClick={() => createDataFile(linesObject)}>
-        createDataFile
-      </button>
-      <DisplayFile
-        tagList={tagList}
-        linesObject={linesObject}
-        setLinesObject={setLinesObject}
-        saveJSON={saveJSON}
-      />
+    <div className={styles["app-wrapper"]}>
+      <Menu />
+      <div className={styles["container-wrapper"]}>
+        <div className={styles.container}>
+          <Title />
+          <div className={styles["file-container"]}>
+            <button onClick={() => createNewFile()} className={styles.button}>
+              New file
+            </button>
+            <button onClick={() => openJSONFile()} className={styles.button}>
+              Open JSON file
+            </button>
+            <button
+              onClick={() => createDataFile(linesObject)}
+              className={styles.button}
+            >
+              Create Data File
+            </button>
+          </div>
+          <p>{fileName}</p>
+          <TagInfo linesObject={linesObject} />
+          <CreateTag tagList={tagList} setTaglist={setTagList} />
+          <TagList tagList={tagList} />
+
+          <DisplayFile
+            tagList={tagList}
+            linesObject={linesObject}
+            setLinesObject={setLinesObject}
+            saveJSON={saveJSON}
+          />
+        </div>
+      </div>
     </div>
   );
 }

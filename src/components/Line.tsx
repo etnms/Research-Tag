@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Line.module.css";
+import styles from "./Line.module.scss";
 
 interface LineProps {
   tagList: Tag[];

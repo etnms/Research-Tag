@@ -1,0 +1,41 @@
+@use './styles/mixin';
+@use './styles/variables';
+
+.app-wrapper {
+    display: flex;
+}
+
+.container-wrapper {
+    padding: 0.5rem;
+    background-color: #f6f6f6;
+    height: 100vh;
+    width: 80vw;
+
+}
+
+.container {
+    @include mixin.flex-center;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    box-shadow: variables.$elevation1;
+    background-color: white
+}
+
+.file-container {
+    @include mixin.flex-center;
+    min-width: 20vw;
+    gap: 0.2rem;
+}
+
+.button {
+    @include mixin.button;
+    box-shadow: variables.$elevation1;
+    background-color: white;
+}
+
+.button:hover {
+    background-color: #d9d9d9;
+    transition: 200ms;
+}

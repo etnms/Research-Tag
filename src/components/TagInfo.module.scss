@@ -1,0 +1,8 @@
+@use '../styles/variables';
+@use '../styles/mixin';
+
+.button {
+    @include mixin.button;
+    background-color: white;
+    box-shadow: variables.$elevation1;
+}

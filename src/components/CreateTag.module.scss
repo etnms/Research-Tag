@@ -1,0 +1,33 @@
+@use "../styles/variables";
+@use "../styles/mixin";
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem
+}
+.button {
+    @include mixin.button;
+}
+
+.button {
+    @include mixin.button;
+    box-shadow: variables.$elevation1;
+    background-color: white;
+}
+
+.button:hover {
+    background-color: #d9d9d9;
+    transition: 200ms;
+}
+
+
+.tag-input {
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: 0;
+    box-shadow: variables.$elevation1;
+}

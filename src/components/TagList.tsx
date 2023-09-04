@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './TagList.module.css';
+import styles from './TagList.module.scss';
 
 interface TagListProps {
     tagList: Tag[]

@@ -1,7 +1,7 @@
 import React from 'react';
 import Line from './Line';
 import { LinesObject } from '../types/LinesObject';
-import styles from './DisplayFile.module.css';
+import styles from './DisplayFile.module.scss';
 
 interface DisplayFileProps {
     tagList: Tag[],

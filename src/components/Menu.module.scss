@@ -1,0 +1,7 @@
+@use '../styles/variables';
+
+.menu {
+    background-color: variables.$primary;
+    width: 20vw;
+    min-height: 100vh;
+}

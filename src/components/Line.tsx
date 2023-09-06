@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Line.module.scss";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface LineProps {
   tagList: Tag[];
@@ -7,8 +8,20 @@ interface LineProps {
   tags: string[];
   index: number;
   addTag: Function;
+  linesObject: LinesObject[];
+  setLinesObject: Function;
+  saveJSON: Function;
 }
-const Line: React.FC<LineProps> = ({ tagList, line, tags, index, addTag }) => {
+const Line: React.FC<LineProps> = ({
+  tagList,
+  line,
+  tags,
+  index,
+  addTag,
+  linesObject,
+  setLinesObject,
+  saveJSON
+}) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
 
   useEffect(() => {
@@ -18,7 +31,7 @@ const Line: React.FC<LineProps> = ({ tagList, line, tags, index, addTag }) => {
   }, []);
 
   const handleTagSelection = () => {
-    const tagValue = (
+    const tagValue: string = (
       document.querySelector(
         `select[name='select-tag-${index}'`
       ) as HTMLSelectElement
@@ -27,7 +40,7 @@ const Line: React.FC<LineProps> = ({ tagList, line, tags, index, addTag }) => {
   };
 
   const getTagColor = (input: string) => {
-    const matchingTag = tagList.find((tag: Tag) => tag.name === input);
+    const matchingTag: Tag | undefined = tagList.find((tag: Tag) => tag.name === input);
     if (matchingTag) {
       return matchingTag.color;
     }
@@ -37,6 +50,28 @@ const Line: React.FC<LineProps> = ({ tagList, line, tags, index, addTag }) => {
 
   const generateRandomId = () => {
     return Math.random();
+  };
+
+  const deleteTag = (index: number, tag: string) => {
+    const itemToUpdateIndex: number = linesObject.findIndex(
+      (linesObject) => linesObject.index === index
+    );
+    
+    if (itemToUpdateIndex !== -1) {
+      const updatedItem: LinesObject = { ...linesObject[itemToUpdateIndex] }; // Create a copy of the object
+      const tagIndexToRemove: number = updatedItem.tags.indexOf(tag);
+    
+      if (tagIndexToRemove !== -1) {
+        updatedItem.tags.splice(tagIndexToRemove, 1); // Remove the tag from the array
+    
+        // Update the linesObject array with the updated object
+        const updatedLinesObject: LinesObject[] = [...linesObject];
+        updatedLinesObject[itemToUpdateIndex] = updatedItem;
+    
+        setLinesObject(updatedLinesObject);
+        saveJSON();
+      }
+    }
   };
 
   return (
@@ -53,6 +88,9 @@ const Line: React.FC<LineProps> = ({ tagList, line, tags, index, addTag }) => {
                 style={{ backgroundColor: `${getTagColor(tag)}` }}
               >
                 {tag}
+                <button onClick={() => deleteTag(index, tag)}>
+                  <DeleteIcon />
+                </button>
               </span>
             ))}
           </div>

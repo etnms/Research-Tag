@@ -11,7 +11,6 @@ import {
 import { dirname, documentDir } from "@tauri-apps/api/path";
 import CreateTag from "./components/CreateTag";
 import TagList from "./components/TagList";
-import { LinesObject } from "./types/LinesObject";
 import { open, save, confirm } from "@tauri-apps/api/dialog";
 import TagInfo from "./components/TagInfo";
 import styles from "./App.module.scss";

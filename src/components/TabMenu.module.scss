@@ -1,0 +1,21 @@
+.nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tab {
+  background-color: white;
+  border: none;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+.tab:hover {
+    background-color: #e1e1e1;
+}
+
+.active-tab {
+    background-color: #d7d7d7;
+    border: black;
+}

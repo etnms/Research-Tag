@@ -13,10 +13,10 @@ import CreateTag from "./components/CreateTag";
 import TagList from "./components/TagList";
 import { LinesObject } from "./types/LinesObject";
 import { open, save, confirm } from "@tauri-apps/api/dialog";
-import Title from "./components/Title";
 import TagInfo from "./components/TagInfo";
 import styles from "./App.module.scss";
 import Menu from "./components/Menu";
+import TabMenu from "./components/TabMenu";
 
 function App() {
   const [filepath, setFilePath] = useState<string>();
@@ -24,6 +24,10 @@ function App() {
   const [linesObject, setLinesObject] = useState<LinesObject[]>([]);
 
   const [tagList, setTagList] = useState<Tag[]>([]);
+
+  const [pageIndex, setPageIndex] = useState<number>(0);
+
+
 
   const readFile = async (path: string | null) => {
     if (path !== null) {
@@ -142,34 +146,47 @@ function App() {
     }
   };
 
+  const switchTabs = (index: number) => {
+    switch (index) {
+      case 0:
+        return (
+          <div>
+            <div className={styles["file-container"]}>
+              <button onClick={() => createNewFile()} className={styles.button}>
+                New file
+              </button>
+              <button onClick={() => openJSONFile()} className={styles.button}>
+                Open JSON file
+              </button>
+              <button
+                onClick={() => createDataFile(linesObject)}
+                className={styles.button}
+              >
+                Create Data File
+              </button>
+            </div>
+
+            <CreateTag tagList={tagList} setTaglist={setTagList} />
+            <DisplayFile
+              tagList={tagList}
+              linesObject={linesObject}
+              setLinesObject={setLinesObject}
+              saveJSON={saveJSON}
+            />
+          </div>
+        );
+      case 1:
+        return <TagInfo linesObject={linesObject} />;
+    }
+  };
+
   return (
     <div className={styles["app-wrapper"]}>
-      <Menu tagList={tagList} projectName={fileName!} setTagList={setTagList}  />
+      <Menu tagList={tagList} projectName={fileName!} setTagList={setTagList} />
       <div className={styles["container-wrapper"]}>
         <div className={styles.container}>
-          <Title />
-          <div className={styles["file-container"]}>
-            <button onClick={() => createNewFile()} className={styles.button}>
-              New file
-            </button>
-            <button onClick={() => openJSONFile()} className={styles.button}>
-              Open JSON file
-            </button>
-            <button
-              onClick={() => createDataFile(linesObject)}
-              className={styles.button}
-            >
-              Create Data File
-            </button>
-          </div>
-          <TagInfo linesObject={linesObject} />
-          <CreateTag tagList={tagList} setTaglist={setTagList} />
-          <DisplayFile
-            tagList={tagList}
-            linesObject={linesObject}
-            setLinesObject={setLinesObject}
-            saveJSON={saveJSON}
-          />
+          <TabMenu setPageIndex={setPageIndex} />
+          {switchTabs(pageIndex)}
         </div>
       </div>
     </div>

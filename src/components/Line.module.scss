@@ -49,7 +49,7 @@
   text-align: center
 }
 
-.select:focus {
+.select:focus, .select:hover {
   box-shadow: 1px 1px 2px 1px #afafaf;
 }
 

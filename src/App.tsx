@@ -144,7 +144,7 @@ function App() {
 
   return (
     <div className={styles["app-wrapper"]}>
-      <Menu tagList={tagList} projectName={fileName!} />
+      <Menu tagList={tagList} projectName={fileName!} setTagList={setTagList}  />
       <div className={styles["container-wrapper"]}>
         <div className={styles.container}>
           <Title />

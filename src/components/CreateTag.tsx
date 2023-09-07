@@ -1,14 +1,12 @@
 import React from "react";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import { open, save } from "@tauri-apps/api/dialog";
-import { documentDir, dirname } from "@tauri-apps/api/path";
+import { documentDir } from "@tauri-apps/api/path";
 import styles from "./CreateTag.module.scss";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { updateTagList } from "../features/tagSlice";
 
-interface CreateTagProps {
-  tagList: Tag[];
-  setTaglist: Function;
-}
-const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
+const CreateTag: React.FC = () => {
   const colorList = [
     "#800000",
     "#87CEEB",
@@ -26,6 +24,9 @@ const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
     "#E5E4E2",
     "#CD7F32",
   ];
+  const dispatch = useAppDispatch();
+  const tagList = useAppSelector((state) => state.tagList.value);
+
   const addTag = () => {
     const name: string = (
       document.querySelector('input[name="tag-input"]') as HTMLInputElement
@@ -33,7 +34,7 @@ const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
     const color: string = colorList[tagList.length];
     const index: number = tagList.length;
     const newTag = { name, color, index };
-    setTaglist([...tagList, newTag]);
+    dispatch(updateTagList([...tagList, newTag]));
   };
 
   const openTagList = async () => {
@@ -48,8 +49,13 @@ const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
       defaultPath: `${documentPath}/TaggerAppData/data`,
     })) as string;
 
-    const content: string[] = JSON.parse(await readTextFile(jsonfilepath!));
-    setTaglist(content);
+    const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
+    const tags: Tag[] = content.map((parsedObject: Tag) => ({
+      name: parsedObject.name,
+      color: parsedObject.color,
+      index: parsedObject.index,
+    }));
+    dispatch(updateTagList(tags));
   };
 
   const saveTagList = async (taglist: Tag[]) => {
@@ -69,11 +75,17 @@ const CreateTag: React.FC<CreateTagProps> = ({ tagList, setTaglist }) => {
 
   return (
     <div className={styles.container}>
-      <button onClick={() => openTagList()} className={styles.button}>Open tag list</button>
+      <button onClick={() => openTagList()} className={styles.button}>
+        Open tag list
+      </button>
       <label htmlFor="tag-input">Create a new tag:</label>
-      <input name="tag-input" className={styles['tag-input']}></input>
-      <button onClick={() => addTag()} className={styles.button}>Create tag</button>
-      <button onClick={() => saveTagList(tagList)} className={styles.button}>Save tag list</button>
+      <input name="tag-input" className={styles["tag-input"]}></input>
+      <button onClick={() => addTag()} className={styles.button}>
+        Create tag
+      </button>
+      <button onClick={() => saveTagList(tagList)} className={styles.button}>
+        Save tag list
+      </button>
     </div>
   );
 };

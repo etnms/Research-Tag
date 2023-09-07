@@ -19,7 +19,6 @@ const TabMenu: React.FC<TabMenuProps> = ({ setPageIndex }) => {
 
     const selectedButton = event.currentTarget.classList;
     selectedButton.add(`${styles["active-tab"]}`);
-    console.log(selectedButton);
   };
   return (
     <nav className={styles.nav}>

@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Line.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { updateLinesObject } from "../features/lineObjectSlice";
 
 interface LineProps {
-  tagList: Tag[];
   line: string;
   tags: string[];
   index: number;
   addTag: Function;
-  linesObject: LinesObject[];
-  setLinesObject: Function;
   saveJSON: Function;
 }
-const Line: React.FC<LineProps> = ({
-  tagList,
-  line,
-  tags,
-  index,
-  addTag,
-  linesObject,
-  setLinesObject,
-  saveJSON
-}) => {
+
+const Line: React.FC<LineProps> = ({ line, tags, index, addTag, saveJSON }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
+
+  const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
+  const linesObject: LinesObject[] = useAppSelector((state) => state.linesObject.value);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (tagList.length > 1) {
@@ -40,7 +35,9 @@ const Line: React.FC<LineProps> = ({
   };
 
   const getTagColor = (input: string) => {
-    const matchingTag: Tag | undefined = tagList.find((tag: Tag) => tag.name === input);
+    const matchingTag: Tag | undefined = tagList.find(
+      (tag: Tag) => tag.name === input
+    );
     if (matchingTag) {
       return matchingTag.color;
     }
@@ -56,19 +53,20 @@ const Line: React.FC<LineProps> = ({
     const itemToUpdateIndex: number = linesObject.findIndex(
       (linesObject) => linesObject.index === index
     );
-    
+
     if (itemToUpdateIndex !== -1) {
       const updatedItem: LinesObject = { ...linesObject[itemToUpdateIndex] }; // Create a copy of the object
       const tagIndexToRemove: number = updatedItem.tags.indexOf(tag);
-    
+
       if (tagIndexToRemove !== -1) {
         updatedItem.tags.splice(tagIndexToRemove, 1); // Remove the tag from the array
-    
+
         // Update the linesObject array with the updated object
         const updatedLinesObject: LinesObject[] = [...linesObject];
         updatedLinesObject[itemToUpdateIndex] = updatedItem;
-    
-        setLinesObject(updatedLinesObject);
+
+        dispatch(updateLinesObject(updatedLinesObject));
+        //setLinesObject(updatedLinesObject);
         saveJSON();
       }
     }

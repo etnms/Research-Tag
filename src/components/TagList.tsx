@@ -1,19 +1,19 @@
 import React from "react";
 import styles from "./TagList.module.scss";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { updateTagList } from "../features/tagSlice";
 
-interface TagListProps {
-  tagList: Tag[];
-  setTagList: Function;
-}
+const TagList: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const tagList = useAppSelector((state) => state.tagList.value);
 
-const TagList: React.FC<TagListProps> = ({ tagList, setTagList }) => {
   const removeTag = (index: number) => {
     const elToRemove = tagList.find((tag: Tag) => tag.index === index);
     const filteredArray = tagList.filter((tag: Tag) => tag !== elToRemove);
-    setTagList(filteredArray);
-    console.log(filteredArray);
+    dispatch(updateTagList(filteredArray));
   };
+
 
   return (
     <ul className={styles.list}>
@@ -24,7 +24,12 @@ const TagList: React.FC<TagListProps> = ({ tagList, setTagList }) => {
           style={{ backgroundColor: `${tag.color}` }}
         >
           {tag.name}
-          <button onClick={() => removeTag(tag.index)} className={styles.button}><DeleteIcon/></button>
+          <button
+            onClick={() => removeTag(tag.index)}
+            className={styles.button}
+          >
+            <DeleteIcon />
+          </button>
         </li>
       ))}
     </ul>

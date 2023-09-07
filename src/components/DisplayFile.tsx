@@ -1,20 +1,17 @@
 import React from "react";
 import Line from "./Line";
 import styles from "./DisplayFile.module.scss";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { updateLinesObject } from "../features/lineObjectSlice";
 
 interface DisplayFileProps {
-  tagList: Tag[];
-  linesObject: LinesObject[];
-  setLinesObject: Function;
   saveJSON: Function;
 }
 
-const DisplayFile: React.FC<DisplayFileProps> = ({
-  linesObject,
-  tagList,
-  setLinesObject,
-  saveJSON,
-}) => {
+const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
+  const linesObject: LinesObject[] = useAppSelector((state) => state.linesObject.value);
+  const dispatch = useAppDispatch();
+
   const addTag = (index: number, tag: string) => {
     // Get copy of array
     const updatedLines: LinesObject[] = [...linesObject];
@@ -32,20 +29,17 @@ const DisplayFile: React.FC<DisplayFileProps> = ({
     updatedLines[index] = updatedItem;
 
     // Update the state with the modified array and save
-    setLinesObject(updatedLines);
+    dispatch(updateLinesObject(updatedLines));
     saveJSON();
   };
   return (
     <div className={styles["item-list"]}>
       {linesObject.map((lineObject: LinesObject) => (
         <Line
-          tagList={tagList}
           line={lineObject.line}
           tags={lineObject.tags}
           index={lineObject.index}
           addTag={addTag}
-          linesObject={linesObject}
-          setLinesObject={setLinesObject}
           saveJSON={saveJSON}
         />
       ))}

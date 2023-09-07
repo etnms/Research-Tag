@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { LinesObject } from '../types/LinesObject';
 import styles from './TagInfo.module.scss';
+import { useAppSelector } from '../app/hooks';
 
-interface TagInfoprops {
-  linesObject: LinesObject[];
-}
-const TagInfo: React.FC<TagInfoprops> = ({ linesObject }) => {
+
+const TagInfo: React.FC = () => {
   const [tagInfo, setTagInfo] = useState<{ [tag: string]: number }>({});
+
+  const linesObject: LinesObject[] = useAppSelector(state => state.linesObject.value);
 
   const getTagInfo = () => {
     const newTaginfo: { [tag: string]: number } = {};
@@ -23,7 +23,6 @@ const TagInfo: React.FC<TagInfoprops> = ({ linesObject }) => {
       });
     });
     setTagInfo(newTaginfo);
-    console.log(tagInfo);
   };
 
   return (

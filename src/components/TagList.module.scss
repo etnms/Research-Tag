@@ -1,7 +1,6 @@
 @use "../styles/mixin";
 @use "../styles/variables";
 
-
 .list {
   @include mixin.flex-align-center-col;
   gap: 0.2rem;
@@ -22,7 +21,6 @@
   display: flex;
   align-items: center;
   gap: 0.2rem;
-
 }
 
 .button {
@@ -33,7 +31,55 @@
   position: absolute;
   top: 50%;
   left: 50%;
-
   translate: -50% -50%;
   z-index: 10;
+  padding: 0.4rem;
+  text-align: center;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: variables.$elevation2;
+  width: 45%;
+  height: 20%;
+  gap: 0.4rem
+}
+
+.show {
+  @include mixin.flex-center;
+  flex-direction: column;
+}
+
+.modal::backdrop {
+  opacity: 0.6;
+  background-color: #7d7d7d;
+}
+
+.container-btns {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.btn-cancel,
+.btn-confirm {
+  @include mixin.button;
+}
+
+.btn-cancel {
+  background-color: #d2d2d2;
+}
+.btn-cancel:hover {
+  background-color: #a8a8a8;
+}
+
+.btn-confirm {
+  background-color: #9d4e4e;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #814040;
+}
+
+.selected-tag {
+  font-size: 1.5rem;
+  font-weight: bold;
 }

@@ -71,7 +71,7 @@ const CreateTag: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <label htmlFor="tag-input">Create a new tag:</label>
+      <label htmlFor="tag-input" className={styles.text}>Create a new tag:</label>
       <input name="tag-input" className={styles["tag-input"]} onChange={() => handleChangeInput()}></input>
       <button onClick={() => addTag()} className={styles.button}>
         Add tag

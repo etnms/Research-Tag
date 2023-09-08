@@ -23,6 +23,7 @@ const TagList: React.FC = () => {
     const modal: HTMLDialogElement | null = document.querySelector(
       "#dialog-delete-list"
     );
+    modal?.classList.add(`${styles.show}`);
     modal?.showModal();
     setSelectedTagName(name);
     setSelectedTagIndex(index);
@@ -32,6 +33,7 @@ const TagList: React.FC = () => {
     const modal: HTMLDialogElement | null = document.querySelector(
       "#dialog-delete-list"
     );
+    modal?.classList.remove(`${styles.show}`);
     modal?.close();
   };
 
@@ -54,14 +56,16 @@ const TagList: React.FC = () => {
           </li>
         ))}
       </ul>
-      <CreateTag/>
+      <CreateTag />
       <dialog id="dialog-delete-list" className={styles.modal}>
         <div>
           Are you sure you want to remove the following tag from the list:
         </div>
-        <p>{selectedTagName}</p>
-        <button onClick={() => closeModal()}>Cancel</button>
-        <button onClick={() => removeTag(selectedTagIndex!)}>Confirm</button>
+        <p className={styles["selected-tag"]}>{selectedTagName}</p>
+        <div className={styles["container-btns"]}>
+          <button onClick={() => closeModal()} className={styles["btn-cancel"]}>Cancel</button>
+          <button onClick={() => removeTag(selectedTagIndex!)} className={styles["btn-confirm"]}>Confirm</button>
+        </div>
       </dialog>
     </>
   );

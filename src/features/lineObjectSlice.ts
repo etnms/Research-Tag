@@ -20,10 +20,29 @@ export const linesObjectSlice = createSlice({
     updateLinesObject: (state, action: PayloadAction<LinesObject[]>) => {
       state.value = action.payload;
     },
+    addTagToArray: (state, action: PayloadAction<{ index: number; tag: string }>) => {
+      const { index, tag } = action.payload;
+      // Find the LinesObject to update by its index
+      const linesObjectToUpdate = state.value.find((item) => item.index === index);
+
+      if (linesObjectToUpdate) {
+        // Make a copy of the tags array and push the new tag
+        linesObjectToUpdate.tags = [...linesObjectToUpdate.tags, tag];
+      }
+    },
+    removeTagFromArray: (state, action: PayloadAction<{index: number; tagToRemove: string}>) => {
+      const {index, tagToRemove} = action.payload;
+      const linesObjectToUpdate = state.value.find((item) => item.index === index);
+      if (linesObjectToUpdate) {
+        // Make a copy of the tags array and push the new tag
+        linesObjectToUpdate.tags = linesObjectToUpdate.tags.filter(tag => tag !== tagToRemove);
+      }
+
+    }
   },
 });
 
-export const { updateLinesObject } = linesObjectSlice.actions;
+export const { updateLinesObject, addTagToArray, removeTagFromArray } = linesObjectSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectLinesObject = (state: RootState) => state.linesObject.value;

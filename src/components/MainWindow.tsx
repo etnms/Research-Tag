@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import DisplayFile from "./DisplayFile";
 import {
@@ -16,6 +16,7 @@ import Menu from "./Menu";
 import TabMenu from "./TabMenu";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateLinesObject } from "../features/lineObjectSlice";
+import { updateTagList } from "../features/tagSlice";
 const MainWindow = () => {
   const [filepath, setFilePath] = useState<string>();
   const [fileName, setFileName] = useState<string>();
@@ -26,6 +27,11 @@ const MainWindow = () => {
     (state) => state.linesObject.value
   );
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Whenever the linesObject state changes, save it to JSON
+    saveJSON();
+  }, [linesObject]);
 
   const readFile = async (path: string | null) => {
     if (path !== null) {
@@ -144,6 +150,27 @@ const MainWindow = () => {
     }
   };
 
+  const openTagList = async () => {
+    const documentPath = await documentDir();
+    const jsonfilepath = (await open({
+      filters: [
+        {
+          name: "Data file",
+          extensions: ["taglist"],
+        },
+      ],
+      defaultPath: `${documentPath}/TaggerAppData/data`,
+    })) as string;
+
+    const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
+    const tags: Tag[] = content.map((parsedObject: Tag) => ({
+      name: parsedObject.name,
+      color: parsedObject.color,
+      index: parsedObject.index,
+    }));
+    dispatch(updateTagList(tags));
+  };
+
   const switchTabs = (index: number) => {
     switch (index) {
       case 0:
@@ -162,9 +189,10 @@ const MainWindow = () => {
               >
                 Create Data File
               </button>
+              <button onClick={() => openTagList()} className={styles.button}>
+                Open tag list
+              </button>
             </div>
-
-            <CreateTag />
             <DisplayFile saveJSON={saveJSON} />
           </div>
         );

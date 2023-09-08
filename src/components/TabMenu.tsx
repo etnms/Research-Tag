@@ -12,7 +12,7 @@ const TabMenu: React.FC<TabMenuProps> = ({ setPageIndex }) => {
     setPageIndex(index);
     // Styling
     const tabElements = document.querySelectorAll(`.${styles.tab}`);
-    //console.log(tabElements);
+
     tabElements.forEach((el) => {
       el.classList.remove(`${styles["active-tab"]}`);
     });
@@ -24,7 +24,7 @@ const TabMenu: React.FC<TabMenuProps> = ({ setPageIndex }) => {
     <nav className={styles.nav}>
       <button
         onClick={(event) => changePageIndex(0, event)}
-        className={styles.tab}
+        className={`${styles.tab} ${styles["active-tab"]} `}
       >
         File
       </button>

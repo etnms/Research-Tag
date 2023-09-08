@@ -1,6 +1,7 @@
 @use "../styles/mixin";
 @use "../styles/variables";
 
+
 .list {
   @include mixin.flex-align-center-col;
   gap: 0.2rem;
@@ -26,4 +27,13 @@
 
 .button {
   border: none;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  translate: -50% -50%;
+  z-index: 10;
 }

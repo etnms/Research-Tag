@@ -2,21 +2,23 @@ import React, { useEffect, useState } from "react";
 import styles from "./Line.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { updateLinesObject } from "../features/lineObjectSlice";
+import {
+  addTagToArray,
+  removeTagFromArray,
+  updateLinesObject,
+} from "../features/lineObjectSlice";
 
 interface LineProps {
   line: string;
   tags: string[];
   index: number;
-  addTag: Function;
   saveJSON: Function;
 }
 
-const Line: React.FC<LineProps> = ({ line, tags, index, addTag, saveJSON }) => {
+const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
 
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
-  const linesObject: LinesObject[] = useAppSelector((state) => state.linesObject.value);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -49,27 +51,14 @@ const Line: React.FC<LineProps> = ({ line, tags, index, addTag, saveJSON }) => {
     return Math.random();
   };
 
-  const deleteTag = (index: number, tag: string) => {
-    const itemToUpdateIndex: number = linesObject.findIndex(
-      (linesObject) => linesObject.index === index
-    );
+  const addTag = (index: number, tag: string) => {
+    const tagExists = tags.find((tagItem: string) => tagItem === tag);
+    if (tagExists) return;
+    else dispatch(addTagToArray({ index, tag }));
+  };
 
-    if (itemToUpdateIndex !== -1) {
-      const updatedItem: LinesObject = { ...linesObject[itemToUpdateIndex] }; // Create a copy of the object
-      const tagIndexToRemove: number = updatedItem.tags.indexOf(tag);
-
-      if (tagIndexToRemove !== -1) {
-        updatedItem.tags.splice(tagIndexToRemove, 1); // Remove the tag from the array
-
-        // Update the linesObject array with the updated object
-        const updatedLinesObject: LinesObject[] = [...linesObject];
-        updatedLinesObject[itemToUpdateIndex] = updatedItem;
-
-        dispatch(updateLinesObject(updatedLinesObject));
-        //setLinesObject(updatedLinesObject);
-        saveJSON();
-      }
-    }
+  const deleteTag = (index: number, tagToRemove: string) => {
+    dispatch(removeTagFromArray({ index, tagToRemove }));
   };
 
   return (

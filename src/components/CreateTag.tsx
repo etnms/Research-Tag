@@ -1,7 +1,6 @@
-import React from "react";
-import { readTextFile, writeFile } from "@tauri-apps/api/fs";
-import { open, save } from "@tauri-apps/api/dialog";
-import { documentDir } from "@tauri-apps/api/path";
+import React, { useState } from "react";
+import { writeFile } from "@tauri-apps/api/fs";
+import { save } from "@tauri-apps/api/dialog";
 import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
@@ -26,6 +25,7 @@ const CreateTag: React.FC = () => {
   ];
   const dispatch = useAppDispatch();
   const tagList = useAppSelector((state) => state.tagList.value);
+  const [errorMsgVisibility, setErrorMsgVisibility] = useState<boolean>(false);
 
   const addTag = () => {
     const name: string = (
@@ -34,28 +34,24 @@ const CreateTag: React.FC = () => {
     const color: string = colorList[tagList.length];
     const index: number = tagList.length;
     const newTag = { name, color, index };
-    dispatch(updateTagList([...tagList, newTag]));
+
+    // Check to see if tag already exists
+    const tagExists: Tag | undefined = tagList.find(
+      (tag: Tag) => tag.name === name
+    );
+    if (tagExists === undefined) {
+      (
+        document.querySelector('input[name="tag-input"]') as HTMLInputElement
+      ).value = "";
+      dispatch(updateTagList([...tagList, newTag]));
+    } else {
+      setErrorMsgVisibility(true);
+      return;
+    }
   };
 
-  const openTagList = async () => {
-    const documentPath = await documentDir();
-    const jsonfilepath = (await open({
-      filters: [
-        {
-          name: "Data file",
-          extensions: ["taglist"],
-        },
-      ],
-      defaultPath: `${documentPath}/TaggerAppData/data`,
-    })) as string;
-
-    const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
-    const tags: Tag[] = content.map((parsedObject: Tag) => ({
-      name: parsedObject.name,
-      color: parsedObject.color,
-      index: parsedObject.index,
-    }));
-    dispatch(updateTagList(tags));
+  const handleChangeInput = () => {
+    setErrorMsgVisibility(false);
   };
 
   const saveTagList = async (taglist: Tag[]) => {
@@ -75,17 +71,19 @@ const CreateTag: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <button onClick={() => openTagList()} className={styles.button}>
-        Open tag list
-      </button>
       <label htmlFor="tag-input">Create a new tag:</label>
-      <input name="tag-input" className={styles["tag-input"]}></input>
+      <input name="tag-input" className={styles["tag-input"]} onChange={() => handleChangeInput()}></input>
       <button onClick={() => addTag()} className={styles.button}>
-        Create tag
+        Add tag
       </button>
       <button onClick={() => saveTagList(tagList)} className={styles.button}>
         Save tag list
       </button>
+      {errorMsgVisibility ? (
+        <p className={styles["error-text"]}>
+          Error: This tag is already in the list.
+        </p>
+      ) : null}
     </div>
   );
 };

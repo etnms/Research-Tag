@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import styles from "./Menu.module.scss";
 import TagList from "./TagList";
 import { useAppSelector } from "../app/hooks";

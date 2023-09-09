@@ -4,15 +4,21 @@ import { useAppSelector } from "../app/hooks";
 
 const TagInfo: React.FC = () => {
   const [tagInfo, setTagInfo] = useState<{ [tag: string]: number }>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
+  );
+  const sortedKeys = Object.keys(tagInfo).sort();
+  const totalTags = Object.values(tagInfo).reduce(
+    (acc, count) => acc + count,
+    0
   );
 
   useEffect(() => {
     getTagInfo();
   }, []);
-  
+
   const getTagInfo = () => {
     const newTaginfo: { [tag: string]: number } = {};
     linesObject.forEach((linesObject: LinesObject) => {
@@ -28,17 +34,52 @@ const TagInfo: React.FC = () => {
       });
     });
     setTagInfo(newTaginfo);
+    setIsLoading(false); // Data loading is complete
   };
 
   return (
-      <div>
-        {Object.keys(tagInfo).map((tag: string) => (
-          <p key={`${tag}-info`}>
-            {tag}: {tagInfo[tag]}
-          </p>
-        ))}
-      </div>
-
+    <div className={styles.container}>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : sortedKeys.length === 0 ? (
+        <p>No data available.</p>
+      ) : (
+        <table className={styles.tagTable}>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedKeys.map((tag: string) => (
+              <tr key={`${tag}-info`}>
+                <td>{tag}</td>
+                <td>{tagInfo[tag]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <table className={styles.tagTable}>
+        <thead>
+          <tr>
+            <th>Total</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total tags</td>
+            <td>{totalTags}</td>
+          </tr>
+          <tr>
+            <td>Total lines</td>
+            <td>{linesObject.length}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 };
 

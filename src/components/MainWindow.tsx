@@ -176,22 +176,30 @@ const MainWindow = () => {
       case 0:
         return (
           <div>
-            <div className={styles["file-container"]}>
-              <button onClick={() => createNewFile()} className={styles.button}>
-                New file
-              </button>
-              <button onClick={() => openJSONFile()} className={styles.button}>
-                Open JSON file
-              </button>
-              <button
-                onClick={() => createDataFile(linesObject)}
-                className={styles.button}
-              >
-                Create Data File
-              </button>
-              <button onClick={() => openTagList()} className={styles.button}>
-                Open tag list
-              </button>
+            <div className={styles["file-management-container"]}>
+              <div className={styles["button-container"]}>
+                <button
+                  onClick={() => createNewFile()}
+                  className={styles.button}
+                >
+                  New file
+                </button>
+                <button
+                  onClick={() => openJSONFile()}
+                  className={styles.button}
+                >
+                  Open JSON file
+                </button>
+                <button
+                  onClick={() => createDataFile(linesObject)}
+                  className={styles.button}
+                >
+                  Create Data File
+                </button>
+                <button onClick={() => openTagList()} className={styles.button}>
+                  Open tag list
+                </button>
+              </div>
             </div>
             <DisplayFile saveJSON={saveJSON} />
           </div>

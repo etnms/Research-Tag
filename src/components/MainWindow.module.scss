@@ -25,10 +25,17 @@
   width: 95%;
 }
 
-.file-container {
-  @include mixin.flex-center;
+.file-management-container {
   min-width: 20vw;
+  padding: 0.4rem;
+}
+
+.button-container {
+  @include mixin.flex-center;
   gap: 0.2rem;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: variables.$elevation1;
 }
 
 .button {

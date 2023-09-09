@@ -25,7 +25,6 @@ const Menu: React.FC<MenuProps> = ({ projectName }) => {
       ) : (
         <p className={styles.text}>No tag list open</p>
       )}
-      <Filter/>
     </div>
   );
 };

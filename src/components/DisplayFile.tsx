@@ -8,7 +8,9 @@ interface DisplayFileProps {
 }
 
 const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
-  const linesObject: LinesObject[] = useAppSelector((state) => state.linesObject.value);
+  const linesObject: LinesObject[] = useAppSelector(
+    (state) => state.linesObject.value
+  );
 
   return (
     <div className={styles["item-list"]}>

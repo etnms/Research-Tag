@@ -34,6 +34,18 @@ const TabMenu: React.FC<TabMenuProps> = ({ setPageIndex }) => {
       >
         Tag information
       </button>
+      <button
+        onClick={(event) => changePageIndex(2, event)}
+        className={styles.tab}
+      >
+        Filter
+      </button>
+      <button
+        onClick={(event) => changePageIndex(3, event)}
+        className={styles.tab}
+      >
+        Export
+      </button>
     </nav>
   );
 };

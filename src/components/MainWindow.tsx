@@ -11,10 +11,10 @@ import styles from "./MainWindow.module.scss";
 import Menu from "./Menu";
 import TabMenu from "./TabMenu";
 import { useAppSelector } from "../app/hooks";
-
 import FileManagement from "./FileManagement";
-const MainWindow = () => {
+import FilterWindow from "./FilterWindow";
 
+const MainWindow = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
 
   const linesObject: LinesObject[] = useAppSelector(
@@ -71,6 +71,8 @@ const MainWindow = () => {
         return <FileManagement saveJSON={saveJSON} />;
       case 1:
         return <TagInfo />;
+      case 2:
+        return <FilterWindow />;
     }
   };
   return (

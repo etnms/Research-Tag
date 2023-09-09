@@ -63,9 +63,12 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
       const content: LinesObject[] = JSON.parse(
         await readTextFile(jsonfilepath!)
       );
+      // Update path and create content
       setFilePath(jsonfilepath);
       dispatch(updateLinesObject(content));
-      dispatch(updateFileName(jsonfilepath));
+      // Update file name
+      const newFilename = getFileName(jsonfilepath) as string;
+      dispatch(updateFileName(newFilename));
     } catch (err) {
       console.log(err);
     }

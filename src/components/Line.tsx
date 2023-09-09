@@ -75,7 +75,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
                 style={{ backgroundColor: `${getTagColor(tag)}` }}
               >
                 {tag}
-                <button onClick={() => deleteTag(index, tag)}>
+                <button onClick={() => deleteTag(index, tag)} className={styles["delete-btn"]}>
                   <DeleteIcon />
                 </button>
               </span>

@@ -1,7 +1,16 @@
+@use "../styles/variables";
+
 .nav {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.nav > button:first-child {
+  border-top-left-radius: variables.$border-radius-main;
+}
+.nav > button:last-child {
+  border-top-right-radius: variables.$border-radius-main;
 }
 
 .tab {
@@ -9,13 +18,14 @@
   border: none;
   font-size: 1.2rem;
   width: 100%;
+  height: 2rem;
 }
 
 .tab:hover {
-    background-color: #e1e1e1;
+  background-color: #e1e1e1;
 }
 
 .active-tab {
-    background-color: #d7d7d7;
-    border: black;
+  background-color: #d7d7d7;
+  border: black;
 }

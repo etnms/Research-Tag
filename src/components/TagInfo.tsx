@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import styles from './TagInfo.module.scss';
-import { useAppSelector } from '../app/hooks';
-
+import React, { useEffect, useState } from "react";
+import styles from "./TagInfo.module.scss";
+import { useAppSelector } from "../app/hooks";
 
 const TagInfo: React.FC = () => {
   const [tagInfo, setTagInfo] = useState<{ [tag: string]: number }>({});
 
-  const linesObject: LinesObject[] = useAppSelector(state => state.linesObject.value);
+  const linesObject: LinesObject[] = useAppSelector(
+    (state) => state.linesObject.value
+  );
 
+  useEffect(() => {
+    getTagInfo();
+  }, []);
+  
   const getTagInfo = () => {
     const newTaginfo: { [tag: string]: number } = {};
     linesObject.forEach((linesObject: LinesObject) => {
@@ -26,7 +31,6 @@ const TagInfo: React.FC = () => {
   };
 
   return (
-    <div>
       <div>
         {Object.keys(tagInfo).map((tag: string) => (
           <p key={`${tag}-info`}>
@@ -34,8 +38,7 @@ const TagInfo: React.FC = () => {
           </p>
         ))}
       </div>
-      <button onClick={() => getTagInfo()} className={styles.button}>Display tag information</button>
-    </div>
+
   );
 };
 

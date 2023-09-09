@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tagListReducer from "../features/tagSlice";
 import linesObjectReducer from "../features/lineObjectSlice";
+import fileNamesReducer from "../features/fileNamesSlice";
 
 export const store = configureStore({
   reducer: {
     tagList: tagListReducer,
     linesObject: linesObjectReducer,
+    fileNames: fileNamesReducer
   },
 });
 

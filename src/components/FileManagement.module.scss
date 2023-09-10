@@ -24,3 +24,10 @@
   background-color: #d9d9d9;
   transition: 200ms;
 }
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}

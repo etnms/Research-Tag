@@ -50,15 +50,19 @@ const MainWindow = () => {
 
   const writeJSONFile = async (lineObject: LinesObject[]) => {
     //const dir = await dirname(filepath!);
-    const filePath = `TaggerAppData/data/${fileName}.json`;
-    await writeFile(
-      {
-        path: filePath,
-        // path: `${dir}/${fileName}.json`,
-        contents: `${JSON.stringify(lineObject, null, 2)}`,
-      },
-      { dir: BaseDirectory.Document }
-    );
+    try {
+      const filePath = `TaggerAppData/data/${fileName}.tdf`;
+      await writeFile(
+        {
+          path: filePath,
+          // path: `${dir}/${fileName}.json`,
+          contents: `${JSON.stringify(lineObject, null, 2)}`,
+        },
+        { dir: BaseDirectory.Document }
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const saveJSON = () => {

@@ -13,16 +13,18 @@
   "tauri": {
     "allowlist": {
       "fs": {
-        "all": true,
         "writeFile": true,
+        "createDir": true,
+        "readFile": true,
+        "readDir": true,
+        "exists": true,
         "scope": [
           "$APP/*",
           "$DESKTOP/*",
           "$DOCUMENT/**",
           "$APPDATA/**",
           "$APPLOCALDATA/**"
-        ],
-        "readFile": true
+        ]
       },
       "path": {
         "all": true

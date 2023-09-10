@@ -4,7 +4,15 @@ import DisplayFile from "./DisplayFile";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { documentDir } from "@tauri-apps/api/path";
 import { open, save } from "@tauri-apps/api/dialog";
-import { readTextFile, writeFile } from "@tauri-apps/api/fs";
+import {
+  BaseDirectory,
+  createDir,
+  readTextFile,
+  writeFile,
+  readDir,
+  FileEntry,
+  exists
+} from "@tauri-apps/api/fs";
 import { updateLinesObject } from "../features/lineObjectSlice";
 import { updateTagList } from "../features/tagSlice";
 import { updateFileName } from "../features/fileNamesSlice";
@@ -18,6 +26,9 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     (state) => state.linesObject.value
   );
   const [filepath, setFilePath] = useState<string>();
+
+  const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
+  const [listFiles, setListFiles] = useState<string[]>();
 
   const createNewFile = async () => {
     try {
@@ -40,59 +51,102 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           tags: [],
         }));
         dispatch(updateLinesObject(newLinesObject));
-        dispatch(updateFileName(newFilepath));
+        const fileName = getFileName(newFilepath) as string;
+        dispatch(updateFileName(fileName));
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const openJSONFile = async () => {
+  const checkDirectory = async () => {
+    const directoryExists: boolean = await exists('TaggerAppData/data', { dir: BaseDirectory.Document });
+    console.log(directoryExists)
+    if (!directoryExists) {
+      createDataFolder
+    }
+  }
+
+  const createDataFolder = async () => {
+    await createDir("TaggerAppData/data", {
+      dir: BaseDirectory.Document,
+      recursive: true,
+    });
+  };
+
+  // Open list of all project files
+  const openProjectFiles = async () => {
+    // Get list of files
+    const files: FileEntry[] = await readDir("TaggerAppData/data", {
+      dir: BaseDirectory.Document,
+      recursive: true,
+    });
+
+    // Get project files
+    const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+      file.name!.endsWith(".tdf")
+    );
+
+    // Create list of files
+    const newList: string[] = [];
+    taggerFiles.map((element: FileEntry) => {
+      newList.push(element.name!);
+    });
+    setListFiles(newList);
+    setListTaggerFiles(taggerFiles);
+
+    // Show modal
+    const modal: HTMLDialogElement | null = document.querySelector(
+      "#file-management-dialog"
+    );
+    modal?.show();
+  };
+
+  // Open project file
+  const openFile = async (file: FileEntry) => {
+    const filePath = `${file.path}`;
+    try {
+      const content: LinesObject[] = JSON.parse(await readTextFile(filePath!));
+      // Update path and create content
+      setFilePath(filePath);
+      dispatch(updateLinesObject(content));
+      // Update file name
+      const newFilename = getFileName(filePath) as string;
+      dispatch(updateFileName(newFilename));
+      closeProjectFilesModal();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Open tag list files
+  const openTagListFiles = async () => {
+
+  }
+  
+  const openTagList = async () => {
     try {
       const documentPath = await documentDir();
-
       const jsonfilepath = (await open({
         filters: [
           {
             name: "Data file",
-            extensions: ["json"],
+            extensions: ["taglist"],
           },
         ],
         defaultPath: `${documentPath}/TaggerAppData/data`,
       })) as string;
-      const content: LinesObject[] = JSON.parse(
-        await readTextFile(jsonfilepath!)
-      );
-      // Update path and create content
-      setFilePath(jsonfilepath);
-      dispatch(updateLinesObject(content));
-      // Update file name
-      const newFilename = getFileName(jsonfilepath) as string;
-      dispatch(updateFileName(newFilename));
+
+      const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
+      const tags: Tag[] = content.map((parsedObject: Tag) => ({
+        name: parsedObject.name,
+        color: parsedObject.color,
+        index: parsedObject.index,
+      }));
+      dispatch(updateTagList(tags));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
-  };
-
-  const openTagList = async () => {
-    const documentPath = await documentDir();
-    const jsonfilepath = (await open({
-      filters: [
-        {
-          name: "Data file",
-          extensions: ["taglist"],
-        },
-      ],
-      defaultPath: `${documentPath}/TaggerAppData/data`,
-    })) as string;
-
-    const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
-    const tags: Tag[] = content.map((parsedObject: Tag) => ({
-      name: parsedObject.name,
-      color: parsedObject.color,
-      index: parsedObject.index,
-    }));
-    dispatch(updateTagList(tags));
   };
 
   const getFileName: (filepath: string) => string | undefined = (
@@ -109,7 +163,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         filters: [
           {
             name: "Tagger data file",
-            extensions: ["json"],
+            extensions: ["tdf"],
           },
         ],
       });
@@ -122,6 +176,13 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     }
   };
 
+  const closeProjectFilesModal = () => {
+    const modal: HTMLDialogElement | null = document.querySelector(
+      "#file-management-dialog"
+    );
+    modal?.close();
+  };
+
   return (
     <div>
       <div className={styles["file-management-container"]}>
@@ -129,8 +190,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           <button onClick={() => createNewFile()} className={styles.button}>
             New file
           </button>
-          <button onClick={() => openJSONFile()} className={styles.button}>
-            Open JSON file
+          <button onClick={() => openProjectFiles()} className={styles.button}>
+            Open project file
           </button>
           <button
             onClick={() => createDataFile(linesObject)}
@@ -144,6 +205,15 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         </div>
       </div>
       <DisplayFile saveJSON={saveJSON} />
+      <dialog id="file-management-dialog" className={styles.modal}>
+        {listTaggerFiles?.map((file: FileEntry, index: number) => (
+          <li key={`${file}${index}`}>
+            <button onClick={() => openFile(file)}>{file.name}</button>
+          </li>
+        ))}
+        <button onClick={() => closeProjectFilesModal()}>close</button>
+        <button onClick={()  => checkDirectory()}>Testing</button>
+      </dialog>
     </div>
   );
 };

@@ -32,6 +32,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
 
   const createNewFile = async () => {
     try {
+      await checkDirectory();
       const newFilepath = (await open({
         filters: [
           {
@@ -55,7 +56,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         dispatch(updateFileName(fileName));
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -65,7 +66,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         dir: BaseDirectory.Document,
       });
       if (!directoryExists) {
-        createDataFolder;
+        createDataFolder();
       }
     } catch (err) {
       console.error(err);
@@ -86,31 +87,35 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   // Open list of all project files
   const openProjectFiles = async () => {
     // Make sure there is a file directory or else create one
-    await checkDirectory();
-    // Get list of files
-    const files: FileEntry[] = await readDir("TaggerAppData/data", {
-      dir: BaseDirectory.Document,
-      recursive: true,
-    });
+    try {
+      await checkDirectory();
+      // Get list of files
+      const files: FileEntry[] = await readDir("TaggerAppData/data", {
+        dir: BaseDirectory.Document,
+        recursive: true,
+      });
 
-    // Get project files
-    const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
-      file.name!.endsWith(".tdf")
-    );
+      // Get project files
+      const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+        file.name!.endsWith(".tdf")
+      );
 
-    // Create list of files
-    const newList: string[] = [];
-    taggerFiles.map((element: FileEntry) => {
-      newList.push(element.name!);
-    });
-    setListFiles(newList);
-    setListTaggerFiles(taggerFiles);
+      // Create list of files
+      const newList: string[] = [];
+      taggerFiles.map((element: FileEntry) => {
+        newList.push(element.name!);
+      });
+      setListFiles(newList);
+      setListTaggerFiles(taggerFiles);
 
-    // Show modal
-    const modal: HTMLDialogElement | null = document.querySelector(
-      "#file-management-dialog"
-    );
-    modal?.show();
+      // Show modal
+      const modal: HTMLDialogElement | null = document.querySelector(
+        "#file-management-dialog"
+      );
+      modal?.show();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Open project file
@@ -180,8 +185,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         contents: `${JSON.stringify(lineObject, null, 2)}`,
         path: path!,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.error(err);
     }
   };
 

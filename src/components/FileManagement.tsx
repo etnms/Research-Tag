@@ -11,7 +11,7 @@ import {
   writeFile,
   readDir,
   FileEntry,
-  exists
+  exists,
 } from "@tauri-apps/api/fs";
 import { updateLinesObject } from "../features/lineObjectSlice";
 import { updateTagList } from "../features/tagSlice";
@@ -60,22 +60,33 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   };
 
   const checkDirectory = async () => {
-    const directoryExists: boolean = await exists('TaggerAppData/data', { dir: BaseDirectory.Document });
-    console.log(directoryExists)
-    if (!directoryExists) {
-      createDataFolder
+    try {
+      const directoryExists: boolean = await exists("TaggerAppData/data", {
+        dir: BaseDirectory.Document,
+      });
+      if (!directoryExists) {
+        createDataFolder;
+      }
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
 
   const createDataFolder = async () => {
-    await createDir("TaggerAppData/data", {
-      dir: BaseDirectory.Document,
-      recursive: true,
-    });
+    try {
+      await createDir("TaggerAppData/data", {
+        dir: BaseDirectory.Document,
+        recursive: true,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // Open list of all project files
   const openProjectFiles = async () => {
+    // Make sure there is a file directory or else create one
+    await checkDirectory();
     // Get list of files
     const files: FileEntry[] = await readDir("TaggerAppData/data", {
       dir: BaseDirectory.Document,
@@ -120,10 +131,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   };
 
   // Open tag list files
-  const openTagListFiles = async () => {
+  const openTagListFiles = async () => {};
 
-  }
-  
   const openTagList = async () => {
     try {
       const documentPath = await documentDir();
@@ -212,7 +221,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           </li>
         ))}
         <button onClick={() => closeProjectFilesModal()}>close</button>
-        <button onClick={()  => checkDirectory()}>Testing</button>
+        <button onClick={() => checkDirectory()}>Testing</button>
       </dialog>
     </div>
   );

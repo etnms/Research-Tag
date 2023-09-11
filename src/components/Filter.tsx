@@ -19,30 +19,31 @@ const Filter: React.FC<FilterProps> = ({
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
   useEffect(() => {
-    console.log('selectedfilter debug')
+    console.log("selectedfilter debug");
     if (selectedFilter === "" && tagList.length !== 0) {
       setSelectedFilter(tagList[0].name);
     }
   }, []);
 
   useEffect(() => {
-    console.log('currentfilter debug')
+    console.log("currentfilter debug");
     if (currentFilters.length > 0) changeFilteredResults(currentFilters);
   }, []);
 
   useEffect(() => {
-    changeFilteredResults(currentFilters)
+    changeFilteredResults(currentFilters);
   }, [currentFilters]);
 
   const addFilter = (value: string) => {
     if (currentFilters.find((filterValue: string) => filterValue === value))
       return;
     setCurrentFilters([...currentFilters, value]);
-
   };
 
   const removeFilter = (value: string) => {
-    const newFilters: string[] = currentFilters.filter((item: string) => item !== value);
+    const newFilters: string[] = currentFilters.filter(
+      (item: string) => item !== value
+    );
     setCurrentFilters(newFilters);
   };
 
@@ -63,7 +64,6 @@ const Filter: React.FC<FilterProps> = ({
       console.log(currentArray);
     }
   };
-
   return tagList.length !== 0 ? (
     <div>
       <h3>Filter by tag</h3>
@@ -89,7 +89,7 @@ const Filter: React.FC<FilterProps> = ({
         </div>
       )}
     </div>
-  ) : null;
+  ) : <p>No filter file currently opened.</p>;
 };
 
 export default Filter;

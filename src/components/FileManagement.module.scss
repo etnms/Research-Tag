@@ -1,6 +1,10 @@
 @use "../styles/mixin";
 @use "../styles/variables";
 
+.title {
+  margin: 0.4rem;
+  font-size: 1.8rem;
+}
 .file-management-container {
   min-width: 20vw;
   padding: 0.4rem;
@@ -30,4 +34,55 @@
   top: 50%;
   left: 50%;
   translate: -50% -50%;
+  width: 70%;
+  height: 50%;
+  padding: 0.3rem;
+  border-radius: 6px;
+  border: none;
+  box-shadow: variables.$elevation2;
+}
+
+.modal::backdrop {
+  opacity: 0.4;
+  background-color: #000000;
+  backdrop-filter: blur(5px);
+}
+
+.show {
+  @include mixin.flex-align-center-col;
+}
+
+.options {
+  @include mixin.flex-align-center-col;
+  width: 95%;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.modal-option {
+  list-style: none;
+  width: 50%;
+}
+
+.btn-option {
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  padding: 0.2rem;
+  margin: 0.2rem;
+  width: 100%;
+  box-shadow: variables.$elevation1;
+  background-color: transparent;
+  min-height: 2.5rem;
+}
+
+.btn-option:hover {
+  background-color: variables.$fourth;
+  scale: 1.05;
+  transition: 200ms;
+}
+
+.close-btn {
+  margin: 0.4rem;
 }

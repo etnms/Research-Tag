@@ -30,6 +30,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
   const [listFiles, setListFiles] = useState<string[]>();
 
+  const [fileType, setFiletype] = useState<string>();
+
   const createNewFile = async () => {
     try {
       await checkDirectory();
@@ -85,7 +87,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   };
 
   // Open list of all project files
-  const openProjectFiles = async () => {
+  const openProjectFiles = async (filetype: string) => {
+    setFiletype(filetype);
     // Make sure there is a file directory or else create one
     try {
       await checkDirectory();
@@ -95,74 +98,73 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         recursive: true,
       });
 
-      // Get project files
-      const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
-        file.name!.endsWith(".tdf")
-      );
+      if (filetype === "project") {
+        // Get project files
+        const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+          file.name!.endsWith(".tdf")
+        );
 
-      // Create list of files
-      const newList: string[] = [];
-      taggerFiles.map((element: FileEntry) => {
-        newList.push(element.name!);
-      });
-      setListFiles(newList);
-      setListTaggerFiles(taggerFiles);
+        // Create list of files
+        const newList: string[] = [];
+        taggerFiles.map((element: FileEntry) => {
+          newList.push(element.name!);
+        });
+        setListFiles(newList);
+        setListTaggerFiles(taggerFiles);
+      } else if (filetype === "taglist") {
+        const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+          file.name!.endsWith(".taglist")
+        );
+
+        // Create list of files
+        const newList: string[] = [];
+        taggerFiles.map((element: FileEntry) => {
+          newList.push(element.name!);
+        });
+        setListFiles(newList);
+        setListTaggerFiles(taggerFiles);
+      } else return;
 
       // Show modal
       const modal: HTMLDialogElement | null = document.querySelector(
         "#file-management-dialog"
       );
-      modal?.show();
+      modal?.classList.add(`${styles.show}`)
+      modal?.showModal();
     } catch (err) {
       console.error(err);
     }
   };
 
   // Open project file
-  const openFile = async (file: FileEntry) => {
+  const openFile = async (file: FileEntry, fileType: string) => {
     const filePath = `${file.path}`;
     try {
-      const content: LinesObject[] = JSON.parse(await readTextFile(filePath!));
-      // Update path and create content
-      setFilePath(filePath);
-      dispatch(updateLinesObject(content));
-      // Update file name
-      const newFilename = getFileName(filePath) as string;
-      dispatch(updateFileName(newFilename));
+      if (fileType === "project") {
+        const content: LinesObject[] = JSON.parse(
+          await readTextFile(filePath!)
+        );
+        // Update path and create content
+        setFilePath(filePath);
+        dispatch(updateLinesObject(content));
+        // Update file name
+        const newFilename = getFileName(filePath) as string;
+        dispatch(updateFileName(newFilename));
+      } else if (fileType === "taglist") {
+        const content: Tag[] = JSON.parse(await readTextFile(filePath!));
+        const tags: Tag[] = content.map((parsedObject: Tag) => ({
+          name: parsedObject.name,
+          color: parsedObject.color,
+          index: parsedObject.index,
+        }));
+        dispatch(updateTagList(tags));
+      } else return;
       closeProjectFilesModal();
     } catch (err) {
       console.error(err);
     }
   };
-
-  // Open tag list files
-  const openTagListFiles = async () => {};
-
-  const openTagList = async () => {
-    try {
-      const documentPath = await documentDir();
-      const jsonfilepath = (await open({
-        filters: [
-          {
-            name: "Data file",
-            extensions: ["taglist"],
-          },
-        ],
-        defaultPath: `${documentPath}/TaggerAppData/data`,
-      })) as string;
-
-      const content: Tag[] = JSON.parse(await readTextFile(jsonfilepath!));
-      const tags: Tag[] = content.map((parsedObject: Tag) => ({
-        name: parsedObject.name,
-        color: parsedObject.color,
-        index: parsedObject.index,
-      }));
-      dispatch(updateTagList(tags));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  
   const getFileName: (filepath: string) => string | undefined = (
     filepath: string
   ) => {
@@ -195,7 +197,18 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
       "#file-management-dialog"
     );
     modal?.close();
+    modal?.classList.remove(`${styles.show}`)
   };
+
+  const clearFileName = (name: string) => {
+
+    if (name.endsWith(".tdf")) {
+      return name.split(".tdf");
+    }
+    else if (name.endsWith(".taglist")) {
+      return name.split(".taglist");
+    }
+  }
 
   return (
     <div>
@@ -204,7 +217,10 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           <button onClick={() => createNewFile()} className={styles.button}>
             New file
           </button>
-          <button onClick={() => openProjectFiles()} className={styles.button}>
+          <button
+            onClick={() => openProjectFiles("project")}
+            className={styles.button}
+          >
             Open project file
           </button>
           <button
@@ -213,20 +229,32 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           >
             Create Data File
           </button>
-          <button onClick={() => openTagList()} className={styles.button}>
+          <button
+            onClick={() => openProjectFiles("taglist")}
+            className={styles.button}
+          >
             Open tag list
           </button>
         </div>
       </div>
       <DisplayFile saveJSON={saveJSON} />
       <dialog id="file-management-dialog" className={styles.modal}>
-        {listTaggerFiles?.map((file: FileEntry, index: number) => (
-          <li key={`${file}${index}`}>
-            <button onClick={() => openFile(file)}>{file.name}</button>
-          </li>
-        ))}
-        <button onClick={() => closeProjectFilesModal()}>close</button>
-        <button onClick={() => checkDirectory()}>Testing</button>
+        <h2 className={styles.title}>{fileType === "project" ? "List of projects:" : "List of tag lists:"}</h2>
+        <ul className={styles.options}>
+          {listTaggerFiles?.map((file: FileEntry, index: number) => (
+            <li key={`${file}${index}`} className={styles["modal-option"]}>
+              <button onClick={() => openFile(file, fileType!)} className={styles["btn-option"]}>
+                {clearFileName(file.name!)}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button
+          onClick={() => closeProjectFilesModal()}
+          className={`${styles.button} ${styles['close-btn']}`}
+        >
+          close
+        </button>
       </dialog>
     </div>
   );

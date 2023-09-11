@@ -13,6 +13,7 @@ import TabMenu from "./TabMenu";
 import { useAppSelector } from "../app/hooks";
 import FileManagement from "./FileManagement";
 import FilterWindow from "./FilterWindow";
+import ExportWindow from "./ExportWindow";
 
 const MainWindow = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
@@ -31,13 +32,6 @@ const MainWindow = () => {
     if (path !== null) {
       await readTextFile(path!);
     }
-  };
-
-  const createDataFolder = async () => {
-    await createDir("TaggerAppData/data", {
-      dir: BaseDirectory.Document,
-      recursive: true,
-    });
   };
 
   const updateJSONFile = async (lineObject: LinesObject[]) => {
@@ -77,6 +71,8 @@ const MainWindow = () => {
         return <TagInfo />;
       case 2:
         return <FilterWindow />;
+      case 3:
+        return <ExportWindow />;
     }
   };
   return (

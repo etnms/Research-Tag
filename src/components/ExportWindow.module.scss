@@ -1,0 +1,6 @@
+@use "../styles/mixin";
+@use "../styles/variables";
+.button {
+    @include mixin.button;
+}
+

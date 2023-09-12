@@ -19,11 +19,7 @@
         "readDir": true,
         "exists": true,
         "scope": [
-          "$APP/*",
-          "$DESKTOP/*",
-          "$DOCUMENT/**",
-          "$APPDATA/**",
-          "$APPLOCALDATA/**"
+          "$DOCUMENT/**"
         ]
       },
       "path": {
@@ -34,7 +30,7 @@
         "open": true
       },
       "dialog": {
-        "all": true
+        "save": true
       }
     },
     "bundle": {

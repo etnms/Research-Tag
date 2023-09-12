@@ -129,7 +129,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
       const modal: HTMLDialogElement | null = document.querySelector(
         "#file-management-dialog"
       );
-      modal?.classList.add(`${styles.show}`)
+      modal?.classList.add(`${styles.show}`);
       modal?.showModal();
     } catch (err) {
       console.error(err);
@@ -164,7 +164,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
       console.error(err);
     }
   };
-  
+
   const getFileName: (filepath: string) => string | undefined = (
     filepath: string
   ) => {
@@ -197,18 +197,16 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
       "#file-management-dialog"
     );
     modal?.close();
-    modal?.classList.remove(`${styles.show}`)
+    modal?.classList.remove(`${styles.show}`);
   };
 
   const clearFileName = (name: string) => {
-
     if (name.endsWith(".tdf")) {
       return name.split(".tdf");
-    }
-    else if (name.endsWith(".taglist")) {
+    } else if (name.endsWith(".taglist")) {
       return name.split(".taglist");
     }
-  }
+  };
 
   return (
     <div>
@@ -235,15 +233,21 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           >
             Open tag list
           </button>
+          <button className={styles.button}>Restore backup</button>
         </div>
       </div>
       <DisplayFile saveJSON={saveJSON} />
       <dialog id="file-management-dialog" className={styles.modal}>
-        <h2 className={styles.title}>{fileType === "project" ? "List of projects:" : "List of tag lists:"}</h2>
+        <h2 className={styles.title}>
+          {fileType === "project" ? "List of projects:" : "List of tag lists:"}
+        </h2>
         <ul className={styles.options}>
           {listTaggerFiles?.map((file: FileEntry, index: number) => (
             <li key={`${file}${index}`} className={styles["modal-option"]}>
-              <button onClick={() => openFile(file, fileType!)} className={styles["btn-option"]}>
+              <button
+                onClick={() => openFile(file, fileType!)}
+                className={styles["btn-option"]}
+              >
                 {clearFileName(file.name!)}
               </button>
             </li>
@@ -251,7 +255,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         </ul>
         <button
           onClick={() => closeProjectFilesModal()}
-          className={`${styles.button} ${styles['close-btn']}`}
+          className={`${styles.button} ${styles["close-btn"]}`}
         >
           close
         </button>

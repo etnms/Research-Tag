@@ -22,7 +22,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (tagList.length > 1) {
+    if (tagList.length > 0) {
       if (selectedTag === "") setSelectedTag(tagList[0].name);
     }
   }, []);

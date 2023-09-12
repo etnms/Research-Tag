@@ -12,7 +12,7 @@ import Menu from "./Menu";
 import TabMenu from "./TabMenu";
 import { useAppSelector } from "../app/hooks";
 import FileManagement from "./FileManagement";
-import FilterWindow from "./FilterWindow";
+import FilterWindow from "./Filter/FilterWindow";
 import ExportWindow from "./ExportWindow";
 
 const MainWindow = () => {

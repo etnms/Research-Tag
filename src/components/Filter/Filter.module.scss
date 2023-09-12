@@ -1,0 +1,50 @@
+@use "../../styles/mixin";
+
+.container {
+  text-align: center;
+  padding: 0.3rem;
+  width: 50vw;
+}
+.no-file-text {
+  text-align: center;
+  margin: 0.4rem;
+  font-size: 1.3rem;
+}
+.text {
+}
+
+.select {
+    font-size: 1.2rem;
+    appearance: none;
+    background-color: transparent;
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 0 1em 0 0;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    min-width: 50%;
+    outline: none;
+    text-align: center;
+}
+
+.button {
+  @include mixin.button;
+}
+
+.filter-container {
+    margin: 0.3rem;
+}
+.list{
+    @include mixin.flex-align-center-col;
+    gap: 0.3rem;
+    list-style: none;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin: 0.3rem;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+}

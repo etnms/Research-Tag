@@ -13,7 +13,7 @@ const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
   );
 
   return (
-    <div className={styles["item-list"]}>
+    <ul className={styles["item-list"]}>
       {linesObject.map((lineObject: LinesObject) => (
         <Line
           line={lineObject.line}
@@ -22,7 +22,7 @@ const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
           saveJSON={saveJSON}
         />
       ))}
-    </div>
+    </ul>
   );
 };
 

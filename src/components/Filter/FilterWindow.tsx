@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Filter from "./Filter";
 import styles from "./FilterWindow.module.scss";
+import FilterLine from "./FilterLine";
 
 const FilterWindow: React.FC = () => {
   const [filteredResults, setFilteredResults] = useState<LinesObject[]>([]);
@@ -10,9 +11,11 @@ const FilterWindow: React.FC = () => {
         filteredResults={filteredResults}
         setFilteredResults={setFilteredResults}
       />
-      {filteredResults.map((linesObject: LinesObject) => (
-        <p>{linesObject.line}</p>
-      ))}
+      <ul>
+        {filteredResults.map((linesObject: LinesObject) => (
+          <FilterLine line={linesObject.line}/>
+        ))}
+      </ul>
     </div>
   );
 };

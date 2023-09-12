@@ -1,0 +1,10 @@
+@use "../../styles/variables";
+
+.line {
+    margin: 0.5rem;
+    padding: 0.3rem;
+    box-shadow: variables.$elevation2;
+    border-radius: 6px;
+    min-height: 2.5rem;
+    list-style: none;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Menu.module.scss";
 import TagList from "./TagList";
 import { useAppSelector } from "../app/hooks";
-import Filter from "./Filter";
+import Filter from "./Filter/Filter";
 
 interface MenuProps {
   projectName: string;

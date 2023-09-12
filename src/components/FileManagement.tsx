@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./FileManagement.module.scss";
 import DisplayFile from "./DisplayFile";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { documentDir } from "@tauri-apps/api/path";
 import { open, save } from "@tauri-apps/api/dialog";
 import {
   BaseDirectory,

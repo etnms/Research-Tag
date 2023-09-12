@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../app/hooks";
+import { useAppSelector } from "../../app/hooks";
+import styles from "./Filter.module.scss";
 
 interface FilterProps {
   filteredResults: LinesObject[];
   setFilteredResults: Function;
 }
 const Filter: React.FC<FilterProps> = ({
-  filteredResults,
   setFilteredResults,
 }) => {
-  const tagList = useAppSelector((state) => state.tagList.value);
+  const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
 
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
@@ -18,18 +18,14 @@ const Filter: React.FC<FilterProps> = ({
   const [currentFilters, setCurrentFilters] = useState<string[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
+  // Update selected filter to default value
   useEffect(() => {
-    console.log("selectedfilter debug");
     if (selectedFilter === "" && tagList.length !== 0) {
       setSelectedFilter(tagList[0].name);
     }
   }, []);
 
-  useEffect(() => {
-    console.log("currentfilter debug");
-    if (currentFilters.length > 0) changeFilteredResults(currentFilters);
-  }, []);
-
+  // change results if there is a filter
   useEffect(() => {
     changeFilteredResults(currentFilters);
   }, [currentFilters]);
@@ -61,26 +57,25 @@ const Filter: React.FC<FilterProps> = ({
         );
       });
       setFilteredResults(currentArray);
-      console.log(currentArray);
     }
   };
   return tagList.length !== 0 ? (
-    <div>
-      <h3>Filter by tag</h3>
-      <select onChange={(event) => handleChange(event)}>
+    <div className={styles.container}>
+      <h3 className={styles.title}>Filter by tag</h3>
+      <select onChange={(event) => handleChange(event)} className={styles.select}>
         {tagList.map((tag: Tag) => (
           <option>{tag.name}</option>
         ))}
       </select>
-      <button onClick={() => addFilter(selectedFilter)}>Add filter</button>
+      <button onClick={() => addFilter(selectedFilter)} className={styles.button}>Add filter</button>
       {currentFilters.length === 0 ? null : (
-        <div>
-          <h4>Current filters:</h4>
-          <ul>
+        <div className={styles["filter-container"]}>
+          <h4 className={styles.subtitle}>Current filters:</h4>
+          <ul className={styles.list}>
             {currentFilters.map((filter: string) => (
-              <li>
-                {filter}{" "}
-                <button onClick={() => removeFilter(filter)}>
+              <li className={styles["list-el"]}>
+                <span>{filter}</span>
+                <button onClick={() => removeFilter(filter)} className={styles.button}>
                   Remove filter
                 </button>
               </li>
@@ -89,7 +84,7 @@ const Filter: React.FC<FilterProps> = ({
         </div>
       )}
     </div>
-  ) : <p>No filter file currently opened.</p>;
+  ) : <p className={styles["no-file-text"]}>No tag file currently opened.</p>;
 };
 
 export default Filter;

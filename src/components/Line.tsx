@@ -5,8 +5,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   addTagToArray,
   removeTagFromArray,
-  updateLinesObject,
 } from "../features/lineObjectSlice";
+import { getTagColor } from "../utils/getTagColor";
 
 interface LineProps {
   line: string;
@@ -22,30 +22,12 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (tagList.length > 0) {
-      if (selectedTag === "") setSelectedTag(tagList[0].name);
+    if (selectedTag === "") {
+      if (tagList.length > 0) {
+        setSelectedTag(tagList[0].name);
+      }
     }
-  }, []);
-
-  const handleTagSelection = () => {
-    const tagValue: string = (
-      document.querySelector(
-        `select[name='select-tag-${index}'`
-      ) as HTMLSelectElement
-    ).value;
-    setSelectedTag(tagValue);
-  };
-
-  const getTagColor = (input: string) => {
-    const matchingTag: Tag | undefined = tagList.find(
-      (tag: Tag) => tag.name === input
-    );
-    if (matchingTag) {
-      return matchingTag.color;
-    }
-    // Handle the case when no matching tag is found
-    return "";
-  };
+  }, [tagList]);
 
   const generateRandomId = () => {
     return Math.random();
@@ -62,7 +44,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   };
 
   return (
-    <li key={index} className={styles.line}>
+    <li key={index + generateRandomId()} className={styles.line}>
       <p className={styles.text}>{line}</p>
       <div className={styles["tag-section"]}>
         {tags.length === 0 ? null : (
@@ -72,10 +54,13 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
               <span
                 className={styles.tag}
                 key={`${tag}-info-${index}-${generateRandomId()}`}
-                style={{ backgroundColor: `${getTagColor(tag)}` }}
+                style={{ backgroundColor: `${getTagColor(tag, tagList)}` }}
               >
                 {tag}
-                <button onClick={() => deleteTag(index, tag)} className={styles["delete-btn"]}>
+                <button
+                  onClick={() => deleteTag(index, tag)}
+                  className={styles["delete-btn"]}
+                >
                   <DeleteIcon />
                 </button>
               </span>
@@ -86,14 +71,9 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
           <select
             name={`select-tag-${index}`}
             className={styles.select}
-            onChange={() => handleTagSelection()}
+            onChange={(event) => setSelectedTag(event.target.value)}
+            value={selectedTag}
           >
-            {tagList.length === 0 && ( // Check if tagList is empty
-              <option value="" disabled>
-                Select a tag
-              </option>
-            )}
-
             {tagList.map((tag: Tag) => (
               <option value={tag.name} key={`${tag.name}-option`}>
                 {tag.name}

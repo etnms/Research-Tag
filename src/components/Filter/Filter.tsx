@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import styles from "./Filter.module.scss";
+import { getTagColor } from "../../utils/getTagColor";
 
 interface FilterProps {
   filteredResults: LinesObject[];
@@ -74,7 +75,7 @@ const Filter: React.FC<FilterProps> = ({
           <ul className={styles.list}>
             {currentFilters.map((filter: string) => (
               <li className={styles["list-el"]}>
-                <span>{filter}</span>
+                <span className={styles.tag} style={{ backgroundColor: `${getTagColor(filter, tagList)}` }}>{filter}</span>
                 <button onClick={() => removeFilter(filter)} className={styles.button}>
                   Remove filter
                 </button>

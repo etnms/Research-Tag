@@ -28,12 +28,6 @@ const MainWindow = () => {
     saveJSON();
   }, [linesObject]);
 
-  const readFile = async (path: string | null) => {
-    if (path !== null) {
-      await readTextFile(path!);
-    }
-  };
-
   const updateJSONFile = async (lineObject: LinesObject[]) => {
     try {
       writeJSONFile(lineObject);
@@ -49,7 +43,6 @@ const MainWindow = () => {
       await writeFile(
         {
           path: filePath,
-          // path: `${dir}/${fileName}.json`,
           contents: `${JSON.stringify(lineObject, null, 2)}`,
         },
         { dir: BaseDirectory.Document }

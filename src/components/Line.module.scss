@@ -32,13 +32,7 @@
 }
 
 .tag {
-  margin: 0rem 0.2rem;
-  padding: 0.3rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;
+  @include mixin.tag;
 }
 
 .delete-btn {

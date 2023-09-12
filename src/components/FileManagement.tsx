@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import styles from "./FileManagement.module.scss";
 import DisplayFile from "./DisplayFile";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { open, save } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/api/dialog";
 import {
   BaseDirectory,
   createDir,
   readTextFile,
-  writeFile,
   readDir,
   FileEntry,
   exists,
@@ -21,9 +20,7 @@ interface FileManagementProps {
 }
 const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   const dispatch = useAppDispatch();
-  const linesObject: LinesObject[] = useAppSelector(
-    (state) => state.linesObject.value
-  );
+
   const [filepath, setFilePath] = useState<string>();
 
   const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
@@ -172,25 +169,6 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     return fileNameClear;
   };
 
-  const createDataFile = async (lineObject: LinesObject[]) => {
-    try {
-      const path = await save({
-        filters: [
-          {
-            name: "Tagger data file",
-            extensions: ["tdf"],
-          },
-        ],
-      });
-      await writeFile({
-        contents: `${JSON.stringify(lineObject, null, 2)}`,
-        path: path!,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const closeProjectFilesModal = () => {
     const modal: HTMLDialogElement | null = document.querySelector(
       "#file-management-dialog"
@@ -219,12 +197,6 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
             className={styles.button}
           >
             Open project file
-          </button>
-          <button
-            onClick={() => createDataFile(linesObject)}
-            className={styles.button}
-          >
-            Create Data File
           </button>
           <button
             onClick={() => openProjectFiles("taglist")}

@@ -11,7 +11,7 @@ const TagInfo: React.FC = () => {
   );
   const sortedKeys = Object.keys(tagInfo).sort();
   const totalTags = Object.values(tagInfo).reduce(
-    (acc, count) => acc + count,
+    (acc: number, count: number) => acc + count,
     0
   );
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./FileManagement.module.scss";
 import DisplayFile from "./DisplayFile";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch } from "../app/hooks";
 import { open } from "@tauri-apps/api/dialog";
 import {
   BaseDirectory,
@@ -13,7 +13,8 @@ import {
 } from "@tauri-apps/api/fs";
 import { updateLinesObject } from "../features/lineObjectSlice";
 import { updateTagList } from "../features/tagSlice";
-import { updateFileName } from "../features/fileNamesSlice";
+import { updateFileName, updateTagListFileName } from "../features/fileNamesSlice";
+import { getFileName } from "../utils/getFileName";
 
 interface FileManagementProps {
   saveJSON: Function;
@@ -94,32 +95,26 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         recursive: true,
       });
 
+      let taggerFiles: FileEntry[];
       if (filetype === "project") {
         // Get project files
-        const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+        taggerFiles = files.filter((file: FileEntry) =>
           file.name!.endsWith(".tdf")
         );
-
-        // Create list of files
-        const newList: string[] = [];
-        taggerFiles.map((element: FileEntry) => {
-          newList.push(element.name!);
-        });
-        setListFiles(newList);
-        setListTaggerFiles(taggerFiles);
+  
       } else if (filetype === "taglist") {
-        const taggerFiles: FileEntry[] = files.filter((file: FileEntry) =>
+        taggerFiles = files.filter((file: FileEntry) =>
           file.name!.endsWith(".taglist")
         );
 
-        // Create list of files
-        const newList: string[] = [];
-        taggerFiles.map((element: FileEntry) => {
-          newList.push(element.name!);
-        });
-        setListFiles(newList);
-        setListTaggerFiles(taggerFiles);
       } else return;
+        // Create list of files
+      const newList: string[] = [];
+      taggerFiles.map((element: FileEntry) => {
+        newList.push(element.name!);
+      });
+      setListFiles(newList);
+      setListTaggerFiles(taggerFiles);
 
       // Show modal
       const modal: HTMLDialogElement | null = document.querySelector(
@@ -153,20 +148,14 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           color: parsedObject.color,
           index: parsedObject.index,
         }));
+        const newTagListFileName = getFileName(filePath) as string;
+        dispatch(updateTagListFileName(newTagListFileName));
         dispatch(updateTagList(tags));
       } else return;
       closeProjectFilesModal();
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const getFileName: (filepath: string) => string | undefined = (
-    filepath: string
-  ) => {
-    const fileNameSplit: string | undefined = filepath.split("\\").pop();
-    const fileNameClear: string | undefined = fileNameSplit?.split(".")[0];
-    return fileNameClear;
   };
 
   const closeProjectFilesModal = () => {

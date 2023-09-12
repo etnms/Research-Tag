@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   BaseDirectory,
-  createDir,
-  readTextFile,
   writeFile,
 } from "@tauri-apps/api/fs";
 import TagInfo from "./TagInfo";
@@ -15,7 +13,7 @@ import FileManagement from "./FileManagement";
 import FilterWindow from "./Filter/FilterWindow";
 import ExportWindow from "./ExportWindow";
 
-const MainWindow = () => {
+const MainWindow: React.FC = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
 
   const linesObject: LinesObject[] = useAppSelector(

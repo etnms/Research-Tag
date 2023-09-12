@@ -4,25 +4,10 @@ import { save } from "@tauri-apps/api/dialog";
 import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
+import { colorList } from "../utils/colorList";
 
 const CreateTag: React.FC = () => {
-  const colorList = [
-    "#800000",
-    "#87CEEB",
-    "#32CD32",
-    "#FFD700",
-    "#FF4500",
-    "#4B0082",
-    "#FA8072",
-    "#D2691E",
-    "#708090",
-    "#000033",
-    "#FFF5E1",
-    "#40E0D0",
-    "#00008B",
-    "#E5E4E2",
-    "#CD7F32",
-  ];
+
   const dispatch = useAppDispatch();
   const tagList = useAppSelector((state) => state.tagList.value);
   const [errorMsgVisibility, setErrorMsgVisibility] = useState<boolean>(false);

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { writeFile } from "@tauri-apps/api/fs";
-import { save } from "@tauri-apps/api/dialog";
 import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
 import { colorList } from "../utils/colorList";
+import { saveTagList } from "../utils/writeProjectFiles";
 
 const CreateTag: React.FC = () => {
-
   const dispatch = useAppDispatch();
   const tagList = useAppSelector((state) => state.tagList.value);
+  const tagListFileName = useAppSelector(
+    (state) => state.fileNames.tagListFileName
+  );
   const [errorMsgVisibility, setErrorMsgVisibility] = useState<boolean>(false);
 
   const addTag = () => {
@@ -29,39 +30,27 @@ const CreateTag: React.FC = () => {
         document.querySelector('input[name="tag-input"]') as HTMLInputElement
       ).value = "";
       dispatch(updateTagList([...tagList, newTag]));
+      saveTagList([...tagList, newTag],tagListFileName );
     } else {
       setErrorMsgVisibility(true);
       return;
     }
   };
 
-  const handleChangeInput = () => {
-    setErrorMsgVisibility(false);
-  };
-
-  const saveTagList = async (taglist: Tag[]) => {
-    const filePath: string | null = await save({
-      filters: [
-        {
-          name: "Tag list",
-          extensions: ["taglist"],
-        },
-      ],
-    });
-    await writeFile({
-      contents: `${JSON.stringify(taglist, null, 2)}`,
-      path: filePath!,
-    });
-  };
-
   return (
     <div className={styles.container}>
-      <label htmlFor="tag-input" className={styles.text}>Create a new tag:</label>
-      <input name="tag-input" className={styles["tag-input"]} onChange={() => handleChangeInput()}></input>
+      <label htmlFor="tag-input" className={styles.text}>
+        Create a new tag:
+      </label>
+      <input
+        name="tag-input"
+        className={styles["tag-input"]}
+        onChange={() => setErrorMsgVisibility(false)}
+      ></input>
       <button onClick={() => addTag()} className={styles.button}>
         Add tag
       </button>
-      <button onClick={() => saveTagList(tagList)} className={styles.button}>
+      <button onClick={() => saveTagList(tagList, tagListFileName)} className={styles.button}>
         Save tag list
       </button>
       {errorMsgVisibility ? (

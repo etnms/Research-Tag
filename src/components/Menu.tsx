@@ -7,6 +7,7 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ projectName }) => {
+  
   return (
     <div className={styles.menu}>
       <h2 className={styles.title}>Menu</h2>

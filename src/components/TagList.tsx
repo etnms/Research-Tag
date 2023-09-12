@@ -4,10 +4,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
 import CreateTag from "./CreateTag";
+import { saveTagList } from "../utils/writeProjectFiles";
 
 const TagList: React.FC = () => {
   const dispatch = useAppDispatch();
   const tagList = useAppSelector((state) => state.tagList.value);
+  const tagListFileName = useAppSelector(
+    (state) => state.fileNames.tagListFileName
+  );
   const [selectedTagName, setSelectedTagName] = useState<string>("");
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>();
 
@@ -16,6 +20,7 @@ const TagList: React.FC = () => {
     const elToRemove = tagList.find((tag: Tag) => tag.index === index);
     const filteredArray = tagList.filter((tag: Tag) => tag !== elToRemove);
     dispatch(updateTagList(filteredArray));
+    saveTagList(filteredArray, tagListFileName);
     closeModal();
   };
 
@@ -63,8 +68,15 @@ const TagList: React.FC = () => {
         </div>
         <p className={styles["selected-tag"]}>{selectedTagName}</p>
         <div className={styles["container-btns"]}>
-          <button onClick={() => closeModal()} className={styles["btn-cancel"]}>Cancel</button>
-          <button onClick={() => removeTag(selectedTagIndex!)} className={styles["btn-confirm"]}>Confirm</button>
+          <button onClick={() => closeModal()} className={styles["btn-cancel"]}>
+            Cancel
+          </button>
+          <button
+            onClick={() => removeTag(selectedTagIndex!)}
+            className={styles["btn-confirm"]}
+          >
+            Confirm
+          </button>
         </div>
       </dialog>
     </>

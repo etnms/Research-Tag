@@ -14,8 +14,6 @@ const Menu: React.FC<MenuProps> = ({ projectName }) => {
       {projectName !== "" ? (
         <span className={styles.text}>Current project: {projectName}</span>
       ) : null}
-
-      <h3 className={styles.subtitle}>Tag list</h3>
       <TagList />
     </div>
   );

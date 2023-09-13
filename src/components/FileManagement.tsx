@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./FileManagement.module.scss";
 import DisplayFile from "./DisplayFile";
 import { useAppDispatch } from "../app/hooks";
@@ -13,21 +13,37 @@ import {
 } from "@tauri-apps/api/fs";
 import { updateLinesObject } from "../features/lineObjectSlice";
 import { updateTagList } from "../features/tagSlice";
-import { updateFileName, updateTagListFileName } from "../features/fileNamesSlice";
+import {
+  updateFileName,
+  updateTagListFileName,
+} from "../features/fileNamesSlice";
 import { getFileName } from "../utils/getFileName";
 
 interface FileManagementProps {
   saveJSON: Function;
 }
 const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
+
   const dispatch = useAppDispatch();
-
-  const [filepath, setFilePath] = useState<string>();
-
   const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
-  const [listFiles, setListFiles] = useState<string[]>();
 
   const [fileType, setFiletype] = useState<string>();
+
+  useEffect(() => {
+    console.log("debug effect");
+    const lastProjectFileStorage: string | null =
+      localStorage.getItem("last-project-file");
+      console.log(lastProjectFileStorage);
+    if (lastProjectFileStorage !== "" && lastProjectFileStorage !== null) {
+      openFile(lastProjectFileStorage!, "project");
+    }
+
+    const lastTagFileStorage: string | null =
+      localStorage.getItem("last-taglist-file");
+    if (lastTagFileStorage !== "" && lastTagFileStorage !== null) {
+      openFile(lastTagFileStorage!, "taglist");
+    }
+  }, []);
 
   const createNewFile = async () => {
     try {
@@ -41,7 +57,6 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         ],
       })) as string;
       if (newFilepath !== undefined) {
-        setFilePath(newFilepath);
         const content: string = await readTextFile(newFilepath);
         const linesArray: string[] = content.split("\n");
 
@@ -101,19 +116,16 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         taggerFiles = files.filter((file: FileEntry) =>
           file.name!.endsWith(".tdf")
         );
-  
       } else if (filetype === "taglist") {
         taggerFiles = files.filter((file: FileEntry) =>
           file.name!.endsWith(".taglist")
         );
-
       } else return;
-        // Create list of files
+      // Create list of files
       const newList: string[] = [];
       taggerFiles.map((element: FileEntry) => {
         newList.push(element.name!);
       });
-      setListFiles(newList);
       setListTaggerFiles(taggerFiles);
 
       // Show modal
@@ -128,30 +140,37 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   };
 
   // Open project file
-  const openFile = async (file: FileEntry, fileType: string) => {
-    const filePath = `${file.path}`;
+  const openFile = async (filePath: string, fileType: string) => {
     try {
       if (fileType === "project") {
+        // Parse file
         const content: LinesObject[] = JSON.parse(
           await readTextFile(filePath!)
         );
+
         // Update path and create content
-        setFilePath(filePath);
         dispatch(updateLinesObject(content));
+
         // Update file name
         const newFilename = getFileName(filePath) as string;
         dispatch(updateFileName(newFilename));
+        // Store path in local storage
       } else if (fileType === "taglist") {
+        // Parse file
         const content: Tag[] = JSON.parse(await readTextFile(filePath!));
         const tags: Tag[] = content.map((parsedObject: Tag) => ({
           name: parsedObject.name,
           color: parsedObject.color,
           index: parsedObject.index,
         }));
+
+        // Gather data and update tag list with data
         const newTagListFileName = getFileName(filePath) as string;
         dispatch(updateTagListFileName(newTagListFileName));
         dispatch(updateTagList(tags));
       } else return;
+      // Set local storage path
+      localStorage.setItem(`last-${fileType}-file`, filePath);
       closeProjectFilesModal();
     } catch (err) {
       console.error(err);
@@ -205,7 +224,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           {listTaggerFiles?.map((file: FileEntry, index: number) => (
             <li key={`${file}${index}`} className={styles["modal-option"]}>
               <button
-                onClick={() => openFile(file, fileType!)}
+                onClick={() => openFile(file.path, fileType!)}
                 className={styles["btn-option"]}
               >
                 {clearFileName(file.name!)}

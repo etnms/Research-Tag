@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
 import CreateTag from "./CreateTag";
 import { saveTagList } from "../utils/writeProjectFiles";
+import { getFileName } from "../utils/getFileName";
 
 const TagList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ const TagList: React.FC = () => {
 
   return (
     <>
+      <h3 className={styles.subtitle}>Tag list ({getFileName(tagListFileName)})</h3>
       <ul className={styles.list}>
         {tagList.map((tag: Tag) => (
           <li

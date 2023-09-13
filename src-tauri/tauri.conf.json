@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "Social Science Tagging App",
+    "productName": "research-tag",
     "version": "0.0.0"
   },
   "tauri": {
@@ -52,7 +52,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Social Science Tagging App",
+        "title": "Research Tag",
         "width": 800,
         "height": 600
       }

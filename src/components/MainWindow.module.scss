@@ -3,6 +3,7 @@
 
 .app-wrapper {
   display: flex;
+  height: 100vh;
 }
 
 .container-wrapper {
@@ -11,6 +12,10 @@
   height: 100vh;
   width: 80vw;
   @include mixin.flex-center;
+}
+
+.container-wrapper-full {
+  width: 100vw;
 }
 
 .container {
@@ -25,5 +30,6 @@
   width: 95%;
 }
 
-
-
+.toggle-button {
+  position: absolute;
+}

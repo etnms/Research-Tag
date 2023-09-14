@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {
-  BaseDirectory,
-  writeFile,
-} from "@tauri-apps/api/fs";
+import { BaseDirectory, writeFile } from "@tauri-apps/api/fs";
 import TagInfo from "./TagInfo";
 import styles from "./MainWindow.module.scss";
 import Menu from "./Menu";
@@ -15,6 +12,7 @@ import ExportWindow from "./ExportWindow";
 
 const MainWindow: React.FC = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
+  const [isMenuSmall, setIsMenuSmall] = useState<boolean>(false);
 
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
@@ -33,6 +31,11 @@ const MainWindow: React.FC = () => {
       console.log(err);
     }
   };
+
+  const toggleMenuSize = () => {
+    setIsMenuSmall(!isMenuSmall);
+  };
+
 
   const writeJSONFile = async (lineObject: LinesObject[]) => {
     //const dir = await dirname(filepath!);
@@ -68,8 +71,13 @@ const MainWindow: React.FC = () => {
   };
   return (
     <div className={styles["app-wrapper"]}>
-      <Menu projectName={fileName!} />
-      <div className={styles["container-wrapper"]}>
+      <Menu
+        projectName={fileName!}
+        isMenuSmall={isMenuSmall}
+        toggleMenuSize={toggleMenuSize}
+      />
+      {isMenuSmall? <button onClick={() => toggleMenuSize()} className={styles["toggle-button"]}>Open menu</button> : null}
+      <div className={`${styles["container-wrapper"]} ${isMenuSmall? styles["container-wrapper-full"] : null}`}>
         <div className={styles.container}>
           <TabMenu setPageIndex={setPageIndex} />
           {switchTabs(pageIndex)}

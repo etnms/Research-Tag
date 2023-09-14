@@ -13,6 +13,8 @@
   border-radius: 12px;
   padding: 0.3rem;
   box-shadow: variables.$elevation1;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .tag {

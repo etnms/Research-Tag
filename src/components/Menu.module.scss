@@ -1,19 +1,24 @@
-@use '../styles/variables';
-@use '../styles/mixin';
+@use "../styles/variables";
+@use "../styles/mixin";
 
 .menu {
-    background-color: variables.$primary;
-    width: 20vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background-color: variables.$primary;
+  width: 20vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.small-menu {
+  width: 1vw;
 }
 
 .title {
-    color: white;
+  color: white;
 }
 
 .text {
-    color: white;
+  color: white;
+  padding: 0.5rem;
 }

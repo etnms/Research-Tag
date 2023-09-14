@@ -30,10 +30,8 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
   const [fileType, setFiletype] = useState<string>();
 
   useEffect(() => {
-    console.log("debug effect");
     const lastProjectFileStorage: string | null =
       localStorage.getItem("last-project-file");
-      console.log(lastProjectFileStorage);
     if (lastProjectFileStorage !== "" && lastProjectFileStorage !== null) {
       openFile(lastProjectFileStorage!, "project");
     }

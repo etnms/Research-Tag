@@ -18,6 +18,7 @@ import {
   updateTagListFileName,
 } from "../features/fileNamesSlice";
 import { getFileName } from "../utils/getFileName";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface FileManagementProps {
   saveJSON: Function;
@@ -232,9 +233,9 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         </ul>
         <button
           onClick={() => closeProjectFilesModal()}
-          className={`${styles.button} ${styles["close-btn"]}`}
+          className={styles["close-btn"]}
         >
-          close
+          <CloseIcon/>
         </button>
       </dialog>
     </div>

@@ -84,5 +84,18 @@
 }
 
 .close-btn {
-  margin: 0.4rem;
+  position: absolute;
+  bottom: 90%;
+  right: 2%;
+  border-radius: 4px;
+  background-color: #9c4040;
+  border: none;
+  color: white;
+  @include mixin.flex-center;
+  cursor: pointer;
+  height: 2rem;
+  width: 2rem;
+}
+.close-btn:hover {
+  background-color: #762f2f;
 }

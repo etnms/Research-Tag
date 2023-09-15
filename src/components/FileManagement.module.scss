@@ -88,7 +88,7 @@
   bottom: 90%;
   right: 2%;
   border-radius: 4px;
-  background-color: #9c4040;
+  background-color: variables.$deep-red;
   border: none;
   color: white;
   @include mixin.flex-center;
@@ -97,5 +97,5 @@
   width: 2rem;
 }
 .close-btn:hover {
-  background-color: #762f2f;
+  background-color: variables.$deep-red-hover;
 }

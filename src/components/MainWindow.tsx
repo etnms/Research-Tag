@@ -9,6 +9,7 @@ import { useAppSelector } from "../app/hooks";
 import FileManagement from "./FileManagement";
 import FilterWindow from "./Filter/FilterWindow";
 import ExportWindow from "./ExportWindow";
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 const MainWindow: React.FC = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
@@ -76,8 +77,8 @@ const MainWindow: React.FC = () => {
         isMenuSmall={isMenuSmall}
         toggleMenuSize={toggleMenuSize}
       />
-      {isMenuSmall? <button onClick={() => toggleMenuSize()} className={styles["toggle-button"]}>Open menu</button> : null}
-      <div className={`${styles["container-wrapper"]} ${isMenuSmall? styles["container-wrapper-full"] : null}`}>
+      {isMenuSmall? <button onClick={() => toggleMenuSize()} className={styles["toggle-button"]}><MenuOpenIcon/></button> : null}
+      <div className={`${styles["container-wrapper"]} ${isMenuSmall? styles["container-wrapper-full"] : ""}`}>
         <div className={styles.container}>
           <TabMenu setPageIndex={setPageIndex} />
           {switchTabs(pageIndex)}

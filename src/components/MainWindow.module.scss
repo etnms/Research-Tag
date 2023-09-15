@@ -12,10 +12,12 @@
   height: 100vh;
   width: 80vw;
   @include mixin.flex-center;
+  transition: 200ms;
 }
 
 .container-wrapper-full {
   width: 100vw;
+  transition: 200ms;
 }
 
 .container {
@@ -32,4 +34,17 @@
 
 .toggle-button {
   position: absolute;
+  left: 0.2%;
+  top: 1%;
+  @include mixin.flex-center;
+  background-color: transparent;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.toggle-button:hover {
+  scale: 1.1;
+  transition: 200ms;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./TagList.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -15,6 +15,24 @@ const TagList: React.FC = () => {
   );
   const [selectedTagName, setSelectedTagName] = useState<string>("");
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>();
+
+  useEffect(() => {
+    const modal: HTMLDialogElement | null = document.querySelector(
+      "#dialog-delete-list"
+    );
+    // Remove default escape behavior
+    const cancelEventHandler = (event: any) => {
+      event.preventDefault();
+      // add close modal behavior to it
+      closeModal();
+    };
+
+    modal?.addEventListener("cancel", cancelEventHandler);
+
+    return () => {
+      modal?.removeEventListener("cancel", cancelEventHandler);
+    };
+  }, []);
 
   const removeTag = (index: number) => {
     if (index === undefined) return;
@@ -45,7 +63,9 @@ const TagList: React.FC = () => {
 
   return (
     <>
-      <h3 className={styles.subtitle}>Tag list ({getFileName(tagListFileName)})</h3>
+      <h3 className={styles.subtitle}>
+        Tag list ({getFileName(tagListFileName)})
+      </h3>
       <ul className={styles.list}>
         {tagList.map((tag: Tag) => (
           <li

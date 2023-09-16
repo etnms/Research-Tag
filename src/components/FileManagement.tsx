@@ -44,6 +44,25 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     }
   }, []);
 
+  // useEffect for changing default behavior on modal
+  useEffect(() => {
+    const modal: HTMLDialogElement | null = document.querySelector(
+      "#file-management-dialog"
+    );
+    // Remove default escape behavior
+    const cancelEventHandler = (event: any) => {
+      event.preventDefault();
+      // add close modal behavior to it
+      closeProjectFilesModal();
+    };
+
+    modal?.addEventListener("cancel", cancelEventHandler);
+
+    return () => {
+      modal?.removeEventListener("cancel", cancelEventHandler);
+    };
+  }, []);
+
   const createNewFile = async () => {
     try {
       await checkDirectory();

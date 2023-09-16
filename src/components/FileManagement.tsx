@@ -179,6 +179,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
         const tags: Tag[] = content.map((parsedObject: Tag) => ({
           name: parsedObject.name,
           color: parsedObject.color,
+          textColor: parsedObject.textColor,
           index: parsedObject.index,
         }));
 

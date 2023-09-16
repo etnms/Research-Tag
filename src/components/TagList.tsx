@@ -66,23 +66,32 @@ const TagList: React.FC = () => {
       <h3 className={styles.subtitle}>
         Tag list ({getFileName(tagListFileName)})
       </h3>
-      <ul className={styles.list}>
-        {tagList.map((tag: Tag) => (
-          <li
-            key={tag.name}
-            className={styles.tag}
-            style={{ backgroundColor: `${tag.color}` }}
-          >
-            {tag.name}
-            <button
-              onClick={() => openModal(tag.index, tag.name)}
-              className={styles.button}
+      {tagList.length === 0 ? (
+        <p className={styles.text}>
+          Taglist is empty
+        </p>
+      ) : (
+        <ul className={styles.list}>
+          {tagList.map((tag: Tag) => (
+            <li
+              key={tag.name}
+              className={styles.tag}
+              style={{
+                backgroundColor: `${tag.color}`,
+                color: `${tag.textColor}`,
+              }}
             >
-              <DeleteIcon />
-            </button>
-          </li>
-        ))}
-      </ul>
+              {tag.name}
+              <button
+                onClick={() => openModal(tag.index, tag.name)}
+                className={styles.button}
+              >
+                <DeleteIcon />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       <CreateTag />
       <dialog id="dialog-delete-list" className={styles.modal}>
         <div>

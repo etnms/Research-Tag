@@ -9,8 +9,9 @@ const TagInfo: React.FC = () => {
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );
-  const sortedKeys = Object.keys(tagInfo).sort();
-  const totalTags = Object.values(tagInfo).reduce(
+  const sortedKeys: string[] = Object.keys(tagInfo).sort();
+  
+  const totalTags: number = Object.values(tagInfo).reduce(
     (acc: number, count: number) => acc + count,
     0
   );

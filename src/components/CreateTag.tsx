@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
-import { colorList } from "../utils/colorList";
+import { colorList, colorTextList } from "../utils/colorList";
 import { saveTagList } from "../utils/writeProjectFiles";
 
 const CreateTag: React.FC = () => {
@@ -18,8 +18,9 @@ const CreateTag: React.FC = () => {
       document.querySelector('input[name="tag-input"]') as HTMLInputElement
     ).value;
     const color: string = colorList[tagList.length];
+    const textColor: string = colorTextList[tagList.length];
     const index: number = tagList.length;
-    const newTag = { name, color, index };
+    const newTag = { name, color, textColor, index };
 
     // Check to see if tag already exists
     const tagExists: Tag | undefined = tagList.find(

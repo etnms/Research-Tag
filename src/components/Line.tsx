@@ -54,7 +54,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
               <span
                 className={styles.tag}
                 key={`${tag}-info-${index}-${generateRandomId()}`}
-                style={{ backgroundColor: `${getTagColor(tag, tagList)}` }}
+                style={{ backgroundColor: `${getTagColor(tag, tagList, false)}`, color: `${getTagColor(tag, tagList, true)}` }}
               >
                 {tag}
                 <button

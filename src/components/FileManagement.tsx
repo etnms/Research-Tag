@@ -5,11 +5,9 @@ import { useAppDispatch } from "../app/hooks";
 import { open } from "@tauri-apps/api/dialog";
 import {
   BaseDirectory,
-  createDir,
   readTextFile,
   readDir,
   FileEntry,
-  exists,
 } from "@tauri-apps/api/fs";
 import { updateLinesObject } from "../features/lineObjectSlice";
 import { updateTagList } from "../features/tagSlice";
@@ -19,11 +17,10 @@ import {
 } from "../features/fileNamesSlice";
 import { getFileName } from "../utils/getFileName";
 import CloseIcon from '@mui/icons-material/Close';
+import { checkDirectory, clearFileName } from "../utils/directoryFunctions";
 
-interface FileManagementProps {
-  saveJSON: Function;
-}
-const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
+
+const FileManagement: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
@@ -92,29 +89,6 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     }
   };
 
-  const checkDirectory = async () => {
-    try {
-      const directoryExists: boolean = await exists("TaggerAppData/data", {
-        dir: BaseDirectory.Document,
-      });
-      if (!directoryExists) {
-        createDataFolder();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const createDataFolder = async () => {
-    try {
-      await createDir("TaggerAppData/data", {
-        dir: BaseDirectory.Document,
-        recursive: true,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   // Open list of all project files
   const openProjectFiles = async (filetype: string) => {
@@ -204,14 +178,6 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
     modal?.classList.remove(`${styles.show}`);
   };
 
-  const clearFileName = (name: string) => {
-    if (name.endsWith(".tdf")) {
-      return name.split(".tdf");
-    } else if (name.endsWith(".taglist")) {
-      return name.split(".taglist");
-    }
-  };
-
   return (
     <div>
       <div className={styles["file-management-container"]}>
@@ -234,7 +200,7 @@ const FileManagement: React.FC<FileManagementProps> = ({ saveJSON }) => {
           <button className={styles.button}>Restore backup</button>
         </div>
       </div>
-      <DisplayFile saveJSON={saveJSON} />
+      <DisplayFile />
       <dialog id="file-management-dialog" className={styles.modal}>
         <h2 className={styles.title}>
           {fileType === "project" ? "List of projects:" : "List of tag lists:"}

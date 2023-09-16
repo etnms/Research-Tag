@@ -10,6 +10,7 @@ import FileManagement from "./FileManagement";
 import FilterWindow from "./Filter/FilterWindow";
 import ExportWindow from "./ExportWindow";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { saveJSON } from "../utils/directoryFunctions";
 
 const MainWindow: React.FC = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
@@ -22,46 +23,18 @@ const MainWindow: React.FC = () => {
 
   useEffect(() => {
     // Whenever the linesObject state changes, save it to JSON
-    saveJSON();
+    saveJSON(linesObject, fileName);
   }, [linesObject]);
 
-  const updateJSONFile = async (lineObject: LinesObject[]) => {
-    try {
-      writeJSONFile(lineObject);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const toggleMenuSize = () => {
     setIsMenuSmall(!isMenuSmall);
   };
 
-
-  const writeJSONFile = async (lineObject: LinesObject[]) => {
-    //const dir = await dirname(filepath!);
-    try {
-      const filePath = `TaggerAppData/data/${fileName}.tdf`;
-      await writeFile(
-        {
-          path: filePath,
-          contents: `${JSON.stringify(lineObject, null, 2)}`,
-        },
-        { dir: BaseDirectory.Document }
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const saveJSON = () => {
-    updateJSONFile(linesObject);
-  };
-
   const switchTabs = (index: number) => {
     switch (index) {
       case 0:
-        return <FileManagement saveJSON={saveJSON} />;
+        return <FileManagement />;
       case 1:
         return <TagInfo />;
       case 2:

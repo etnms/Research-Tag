@@ -12,7 +12,6 @@ interface LineProps {
   line: string;
   tags: string[];
   index: number;
-  saveJSON: Function;
 }
 
 const Line: React.FC<LineProps> = ({ line, tags, index }) => {

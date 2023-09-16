@@ -3,11 +3,8 @@ import Line from "./Line";
 import styles from "./DisplayFile.module.scss";
 import { useAppSelector } from "../app/hooks";
 
-interface DisplayFileProps {
-  saveJSON: Function;
-}
 
-const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
+const DisplayFile: React.FC = () => {
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );
@@ -19,7 +16,6 @@ const DisplayFile: React.FC<DisplayFileProps> = ({ saveJSON }) => {
           line={lineObject.line}
           tags={lineObject.tags}
           index={lineObject.index}
-          saveJSON={saveJSON}
         />
       ))}
     </ul>

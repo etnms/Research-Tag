@@ -23,6 +23,7 @@ import {
   openExternalFile,
   restoreBackup,
 } from "../utils/directoryFunctions";
+import Loader from "./Loader";
 
 const FileManagement: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,6 @@ const FileManagement: React.FC = () => {
 
   const [fileType, setFiletype] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-
 
   useEffect(() => {
     const lastProjectFileStorage: string | null =
@@ -188,7 +188,7 @@ const FileManagement: React.FC = () => {
       await restoreBackup();
       // Handle completion or any other logic here
     } catch (error) {
-      console.error('Error during backup restoration:', error);
+      console.error("Error during backup restoration:", error);
     } finally {
       setLoading(false);
     }
@@ -216,17 +216,15 @@ const FileManagement: React.FC = () => {
           <button className={styles.button} onClick={() => openExternalFile()}>
             Open external file
           </button>
-          <button className={styles.button} onClick={() => handleRestoreClick()} >
+          <button
+            className={styles.button}
+            onClick={() => handleRestoreClick()}
+          >
             Restore backup
           </button>
         </div>
       </div>
-      {loading? (
-        <div className={styles["loader-container"]}>
-          <p>Loading backup. Please wait</p>
-          <span className={styles.loader}></span>
-        </div>
-      ) : null}
+      {loading ? <Loader title={"Loading backup. Please wait"} /> : null}
       <DisplayFile />
       <dialog id="file-management-dialog" className={styles.modal}>
         <h2 className={styles.title}>

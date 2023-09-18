@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ExportWindow.module.scss";
 import { save } from "@tauri-apps/api/dialog";
 import { useAppSelector } from "../app/hooks";
@@ -14,13 +14,17 @@ import JSZip from "jszip";
 import FileSaver from "file-saver";
 import { create } from "xmlbuilder2";
 import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
+import Loader from "./Loader";
 
 const ExportWindow: React.FC = () => {
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const exportJSON = async () => {
+    setLoading(true);
     try {
       const filePath: string | null = await save({
         filters: [
@@ -38,9 +42,10 @@ const ExportWindow: React.FC = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
-
 
   const exportXML = async () => {
     try {
@@ -59,7 +64,7 @@ const ExportWindow: React.FC = () => {
       // Iterate through the array and create XML elements for each item
       linesObject.forEach((item: LinesObject) => {
         const lineElement: XMLBuilder = root.ele("line");
-        lineElement.ele("content").txt((item.line));
+        lineElement.ele("content").txt(item.line);
         lineElement.ele("index").txt(item.index.toString());
 
         // Create a tags element and add individual tag elements
@@ -74,6 +79,8 @@ const ExportWindow: React.FC = () => {
       await writeTextFile({ path: filePath!, contents: xmlString });
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,11 +127,13 @@ const ExportWindow: React.FC = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
+    <>
       <button
         className={styles.button}
         onClick={() => {
@@ -133,11 +142,16 @@ const ExportWindow: React.FC = () => {
       >
         Export JSON
       </button>
-      <button className={styles.button} onClick={() => exportXML()}>Export XML</button>
+      <button className={styles.button} onClick={() => exportXML()}>
+        Export XML
+      </button>
       <button className={styles.button} onClick={() => exportBackup()}>
         Backup all projects
       </button>
-    </div>
+      {loading ? (
+        <Loader title={"Project is being exported. Please wait."} />
+      ) : null}
+    </>
   );
 };
 

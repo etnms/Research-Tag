@@ -1,7 +1,19 @@
 .item-list {
   padding: 0 2.5rem;
   overflow-y: auto;
-  height: 80vh;
+  height: 85%;
   padding: 0.5rem;
   margin: 0.2rem;
+}
+
+@media (max-height: 700px) {
+  .item-list {
+    height: 90%;
+  }
+}
+
+@media (max-height: 630px) {
+  .item-list {
+    height: 85%;
+  }
 }

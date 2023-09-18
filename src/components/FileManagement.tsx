@@ -195,7 +195,7 @@ const FileManagement: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles["file-management-container"]}>
         <div className={styles["button-container"]}>
           <button onClick={() => createNewFile()} className={styles.button}>

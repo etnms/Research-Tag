@@ -5,6 +5,9 @@
   margin: 0.4rem;
   font-size: 1.8rem;
 }
+.container {
+  height: 95%;
+}
 .file-management-container {
   min-width: 20vw;
   padding: 0.4rem;
@@ -98,4 +101,12 @@
 }
 .close-btn:hover {
   background-color: variables.$deep-red-hover;
+}
+
+
+
+@media (max-height: 700px) {
+  .container {
+    height: 85%;
+  }
 }

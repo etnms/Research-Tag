@@ -16,6 +16,7 @@ const DisplayFile: React.FC = () => {
           line={lineObject.line}
           tags={lineObject.tags}
           index={lineObject.index}
+          key={lineObject.index + lineObject.line}
         />
       ))}
     </ul>

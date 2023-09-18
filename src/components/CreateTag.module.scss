@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
 .button {
   @include mixin.button;
 }
@@ -31,8 +32,8 @@
 }
 
 .tag-input:focus {
-    transform: scale(1.05);
-    transition: 200ms;
+  transform: scale(1.05);
+  transition: 200ms;
 }
 
 .text {
@@ -48,5 +49,57 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  translate: -50% 50%;
+  translate: -50% -50%;
+  padding: 1rem;
+  width: 40vw;
+  height: 30vh;
+  gap: 0.5rem;
+  border-radius: 12px;
+}
+
+.show {
+  @include mixin.flex-align-center-col;
+}
+
+.btn-container {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.dialog > input {
+  font-size: 1.2rem;
+  outline: none;
+  border-radius: 8px;
+  border: 2px solid black;
+  padding: 0.3rem 0.5rem;
+}
+
+.dialog > input:hover {
+  scale: 1.02;
+  transition: 200ms;
+}
+
+.dialog > input:focus {
+  box-shadow: variables.$elevation1;
+}
+
+.btn-cancel,
+.btn-confirm {
+  @include mixin.button;
+}
+
+.btn-cancel {
+  background-color: #d2d2d2;
+}
+.btn-cancel:hover {
+  background-color: #a8a8a8;
+}
+
+.btn-confirm {
+  background-color: #9d4e4e;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #814040;
 }

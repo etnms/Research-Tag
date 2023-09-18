@@ -13,7 +13,7 @@ const FilterWindow: React.FC = () => {
       />
       <ul>
         {filteredResults.map((linesObject: LinesObject) => (
-          <FilterLine line={linesObject.line}/>
+          <FilterLine line={linesObject.line} key={linesObject.index + "filter"}/>
         ))}
       </ul>
     </div>

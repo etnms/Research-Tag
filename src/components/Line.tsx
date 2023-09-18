@@ -18,14 +18,15 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(tagList);
     if (selectedTag === "") {
       if (tagList.length > 0) {
         setSelectedTag(tagList[0].name);
       }
     }
     if (!checkTagExist(tagList, selectedTag)) {
-      setSelectedTag(tagList[0].name);
+      if (tagList.length > 0) {
+        setSelectedTag(tagList[0].name);
+      }
     }
   }, [tagList]);
 

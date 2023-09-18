@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
@@ -6,6 +6,8 @@ import { colorList, colorTextList } from "../utils/colorList";
 import { saveTagList } from "../utils/writeProjectFiles";
 import { updateTagListFileName } from "../features/fileNamesSlice";
 import { showModal } from "../utils/showModal";
+import { checkDirectory } from "../utils/directoryFunctions";
+import { BaseDirectory, FileEntry, readDir } from "@tauri-apps/api/fs";
 
 const CreateTag: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +16,26 @@ const CreateTag: React.FC = () => {
     (state) => state.fileNames.tagListFileName
   );
   const [errorMsgVisibility, setErrorMsgVisibility] = useState<boolean>(false);
+  const [newTagListNameError, setNewTagListNameError] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const modal: HTMLDialogElement | null = document.querySelector(
+      "#create-new-tag-list"
+    );
+    // Remove default escape behavior
+    const cancelEventHandler = (event: any) => {
+      event.preventDefault();
+      // add close modal behavior to it
+      showModal("create-new-tag-list", `${styles.show}`);
+    };
+
+    modal?.addEventListener("cancel", cancelEventHandler);
+
+    return () => {
+      modal?.removeEventListener("cancel", cancelEventHandler);
+    };
+  }, []);
 
   const addTag = () => {
     const name: string = (
@@ -40,27 +62,49 @@ const CreateTag: React.FC = () => {
     }
   };
 
-  const createNewTagList = () => {
+  const createNewTagList = async () => {
     // create default values and name
     const newTagList: Tag[] = [];
     const name = (
       document.querySelector("input[name='input-taglist']") as HTMLInputElement
     ).value;
-    // Update state
-    dispatch(updateTagList(newTagList));
-    dispatch(updateTagListFileName(name));
-    // Create file
-    saveTagList(newTagList, name);
-    // Reset input to empty
-    (
-      document.querySelector("input[name='input-taglist']") as HTMLInputElement
-    ).value = "";
-    showModal("create-new-tag-list");
+    // Check if taglist with same name already exists
+    const tagListExists: boolean | undefined = await checkTagListExists(name);
+    if (tagListExists) {
+      return;
+    } else {
+      // Update state
+      dispatch(updateTagList(newTagList));
+      dispatch(updateTagListFileName(name));
+      // Create file
+      saveTagList(newTagList, name);
+      // Reset input to empty
+      (
+        document.querySelector(
+          "input[name='input-taglist']"
+        ) as HTMLInputElement
+      ).value = "";
+      showModal("create-new-tag-list", `${styles.show}`);
+    }
   };
 
-  const checkTagListExists = async () => {
-    
-  }
+  const checkTagListExists = async (name: string) => {
+    await checkDirectory();
+    // Get list of files
+    const files: FileEntry[] = await readDir("TaggerAppData/data", {
+      dir: BaseDirectory.Document,
+      recursive: true,
+    });
+    const fileAlreadyExists: FileEntry | undefined = files.find(
+      (file: FileEntry) => file.name === `${name}.taglist`
+    );
+
+    if (fileAlreadyExists) {
+      setNewTagListNameError(true);
+      return true;
+    }
+    return false;
+  };
 
   return (
     <>
@@ -78,7 +122,7 @@ const CreateTag: React.FC = () => {
         </button>
         <button
           onClick={() => {
-            showModal("create-new-tag-list");
+            showModal("create-new-tag-list", `${styles.show}`);
           }}
           className={styles.button}
         >
@@ -92,10 +136,29 @@ const CreateTag: React.FC = () => {
       </div>
       <dialog id="create-new-tag-list" className={styles.dialog}>
         <h2>Create a new tag list:</h2>
-        <input name="input-taglist"></input>
-        <button onClick={() => showModal("create-new-tag-list")}>Cancel</button>
-        <button onClick={() => createNewTagList()}>Create</button>
-        <p>Error: this tag list already exists</p>
+        <input
+          name="input-taglist"
+          onChange={() => setNewTagListNameError(false)}
+        ></input>
+        <div className={styles["btn-container"]}>
+          <button
+            onClick={() => showModal("create-new-tag-list", `${styles.show}`)}
+            className={styles["btn-cancel"]}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => createNewTagList()}
+            className={styles["btn-confirm"]}
+          >
+            Create
+          </button>
+        </div>
+        {newTagListNameError ? (
+          <p className={styles["error-text"]}>
+            Error: this tag list already exists
+          </p>
+        ) : null}
       </dialog>
     </>
   );

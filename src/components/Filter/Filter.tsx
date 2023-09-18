@@ -7,9 +7,7 @@ interface FilterProps {
   filteredResults: LinesObject[];
   setFilteredResults: Function;
 }
-const Filter: React.FC<FilterProps> = ({
-  setFilteredResults,
-}) => {
+const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
 
   const linesObject: LinesObject[] = useAppSelector(
@@ -63,20 +61,39 @@ const Filter: React.FC<FilterProps> = ({
   return tagList.length !== 0 ? (
     <div className={styles.container}>
       <h3 className={styles.title}>Filter by tag</h3>
-      <select onChange={(event) => handleChange(event)} className={styles.select}>
+      <select
+        onChange={(event) => handleChange(event)}
+        className={styles.select}
+      >
         {tagList.map((tag: Tag) => (
           <option>{tag.name}</option>
         ))}
       </select>
-      <button onClick={() => addFilter(selectedFilter)} className={styles.button}>Add filter</button>
+      <button
+        onClick={() => addFilter(selectedFilter)}
+        className={styles.button}
+      >
+        Add filter
+      </button>
       {currentFilters.length === 0 ? null : (
         <div className={styles["filter-container"]}>
           <h4 className={styles.subtitle}>Current filters:</h4>
           <ul className={styles.list}>
             {currentFilters.map((filter: string) => (
               <li className={styles["list-el"]}>
-                <span className={styles.tag} style={{ backgroundColor: `${getTagColor(filter, tagList)}` }}>{filter}</span>
-                <button onClick={() => removeFilter(filter)} className={styles.button}>
+                <span
+                  className={styles.tag}
+                  style={{
+                    backgroundColor: `${getTagColor(filter, tagList, false)}`,
+                    color: `${getTagColor(filter, tagList, true)}`,
+                  }}
+                >
+                  {filter}
+                </span>
+                <button
+                  onClick={() => removeFilter(filter)}
+                  className={styles.button}
+                >
                   Remove filter
                 </button>
               </li>
@@ -85,7 +102,9 @@ const Filter: React.FC<FilterProps> = ({
         </div>
       )}
     </div>
-  ) : <p className={styles["no-file-text"]}>No tag file currently opened.</p>;
+  ) : (
+    <p className={styles["no-file-text"]}>No tag file currently opened.</p>
+  );
 };
 
 export default Filter;

@@ -16,12 +16,15 @@ import {
   updateTagListFileName,
 } from "../features/fileNamesSlice";
 import { getFileName } from "../utils/getFileName";
-import CloseIcon from '@mui/icons-material/Close';
-import { checkDirectory, clearFileName } from "../utils/directoryFunctions";
-
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  checkDirectory,
+  clearFileName,
+  saveJSON,
+} from "../utils/directoryFunctions";
+import { saveTagList } from "../utils/writeProjectFiles";
 
 const FileManagement: React.FC = () => {
-
   const dispatch = useAppDispatch();
   const [listTaggerFiles, setListTaggerFiles] = useState<FileEntry[]>([]);
 
@@ -88,7 +91,6 @@ const FileManagement: React.FC = () => {
       console.error(err);
     }
   };
-
 
   // Open list of all project files
   const openProjectFiles = async (filetype: string) => {
@@ -170,6 +172,35 @@ const FileManagement: React.FC = () => {
     }
   };
 
+  const openExternalFile = async () => {
+    try {
+      const paths = await open({
+        multiple: true,
+        filters: [{ name: "Tagger app files", extensions: ["taglist", "tdf"] }],
+      }) as string[];
+  
+      if (!paths || paths.length === 0) {
+        return;
+      }
+  
+      await Promise.all(paths.map(async (filePath: string) => {
+        const fileName: string | undefined = getFileName(filePath);
+        if (filePath.endsWith(".taglist")) {
+          const content: Tag[] = JSON.parse(await readTextFile(filePath!));
+          await saveTagList(content, fileName!);
+        }
+        if (filePath.endsWith(".tdf")) {
+          const content: LinesObject[] = JSON.parse(await readTextFile(filePath!));
+          await saveJSON(content, fileName!);
+        }
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const readFileContent = () => {};
+
   const closeProjectFilesModal = () => {
     const modal: HTMLDialogElement | null = document.querySelector(
       "#file-management-dialog"
@@ -197,6 +228,9 @@ const FileManagement: React.FC = () => {
           >
             Open tag list
           </button>
+          <button className={styles.button} onClick={() => openExternalFile()}>
+            Open external file
+          </button>
           <button className={styles.button}>Restore backup</button>
         </div>
       </div>
@@ -221,7 +255,7 @@ const FileManagement: React.FC = () => {
           onClick={() => closeProjectFilesModal()}
           className={styles["close-btn"]}
         >
-          <CloseIcon/>
+          <CloseIcon />
         </button>
       </dialog>
     </div>

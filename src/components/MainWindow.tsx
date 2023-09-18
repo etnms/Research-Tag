@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { BaseDirectory, writeFile } from "@tauri-apps/api/fs";
 import TagInfo from "./TagInfo";
 import styles from "./MainWindow.module.scss";
 import Menu from "./Menu";
@@ -43,6 +42,7 @@ const MainWindow: React.FC = () => {
         return <ExportWindow />;
     }
   };
+
   return (
     <div className={styles["app-wrapper"]}>
       <Menu

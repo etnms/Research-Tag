@@ -1,5 +1,6 @@
 @use "../styles/variables";
 @use "../styles/mixin";
+@use "../styles/animations";
 
 .container {
   display: flex;
@@ -43,6 +44,7 @@
 
 .error-text {
   color: red;
+  animation: error-shake 200ms;
 }
 
 .dialog {

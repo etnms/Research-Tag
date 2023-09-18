@@ -156,7 +156,7 @@ const CreateTag: React.FC = () => {
         </div>
         {newTagListNameError ? (
           <p className={styles["error-text"]}>
-            Error: this tag list already exists
+            Error: this tag list already exists.
           </p>
         ) : null}
       </dialog>

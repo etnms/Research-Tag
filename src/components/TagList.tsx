@@ -4,9 +4,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
 import CreateTag from "./CreateTag";
-import { saveTagList } from "../utils/writeProjectFiles";
 import { getFileName } from "../utils/getFileName";
 import { showModal } from "../utils/showModal";
+import { saveTagList } from "../utils/directoryFunctions";
 
 const TagList: React.FC = () => {
   const dispatch = useAppDispatch();

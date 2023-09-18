@@ -3,10 +3,9 @@ import styles from "./CreateTag.module.scss";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateTagList } from "../features/tagSlice";
 import { colorList, colorTextList } from "../utils/colorList";
-import { saveTagList } from "../utils/writeProjectFiles";
 import { updateTagListFileName } from "../features/fileNamesSlice";
 import { showModal } from "../utils/showModal";
-import { checkDirectory } from "../utils/directoryFunctions";
+import { checkDirectory, saveTagList } from "../utils/directoryFunctions";
 import { BaseDirectory, FileEntry, readDir } from "@tauri-apps/api/fs";
 
 const CreateTag: React.FC = () => {

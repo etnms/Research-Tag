@@ -98,7 +98,7 @@ const ExportWindow: React.FC = () => {
         });
 
         // Use Promise.all to read and add files to the zip
-        const promises = files.map(async (file: FileEntry) => {
+        const promises: Promise<void>[] = files.map(async (file: FileEntry) => {
           const content: string = await readTextFile(file.path);
           zip.file(file.name!, content);
         });

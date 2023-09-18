@@ -183,8 +183,8 @@ const FileManagement: React.FC = () => {
   };
 
   const handleRestoreClick = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       await restoreBackup();
       // Handle completion or any other logic here
     } catch (error) {

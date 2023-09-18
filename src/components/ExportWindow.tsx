@@ -24,7 +24,7 @@ const ExportWindow: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const exportJSON = async () => {
-    setLoading(true);
+   
     try {
       const filePath: string | null = await save({
         filters: [
@@ -35,6 +35,7 @@ const ExportWindow: React.FC = () => {
         ],
       });
       if (filePath !== null) {
+        setLoading(true);
         await writeTextFile({
           contents: `${JSON.stringify(linesObject, null, 2)}`,
           path: filePath!,
@@ -76,6 +77,7 @@ const ExportWindow: React.FC = () => {
 
       // Generate the XML string
       const xmlString: string = root.end({ prettyPrint: true });
+      setLoading(true);
       await writeTextFile({ path: filePath!, contents: xmlString });
     } catch (err) {
       console.log(err);
@@ -99,6 +101,7 @@ const ExportWindow: React.FC = () => {
       });
 
       if (zipPath !== null) {
+        setLoading(true);
         // Read data
         const files: FileEntry[] = await readDir("TaggerAppData/data", {
           dir: BaseDirectory.Document,
@@ -117,6 +120,7 @@ const ExportWindow: React.FC = () => {
             return zip.generateAsync({ type: "blob" });
           })
           .then(async (content) => {
+
             const contents = await content.arrayBuffer();
             await writeBinaryFile({ contents: contents, path: zipPath! });
             FileSaver.saveAs(content, "download.zip");

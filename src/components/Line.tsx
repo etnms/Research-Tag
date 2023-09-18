@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Line.module.scss";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import {
-  addTagToArray,
-  removeTagFromArray,
-} from "../features/lineObjectSlice";
+import { addTagToArray, removeTagFromArray } from "../features/lineObjectSlice";
 import { getTagColor } from "../utils/getTagColor";
 
 interface LineProps {
@@ -21,15 +18,22 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log(tagList);
     if (selectedTag === "") {
       if (tagList.length > 0) {
         setSelectedTag(tagList[0].name);
       }
     }
+    if (!checkTagExist(tagList, selectedTag)) {
+      setSelectedTag(tagList[0].name);
+    }
   }, [tagList]);
 
-  const generateRandomId = () => {
-    return Math.random();
+  const checkTagExist = (tagList: Tag[], value: string) => {
+    tagList.forEach((tag: Tag) => {
+      if (tag.name === value) return true;
+    });
+    return false;
   };
 
   const addTag = (index: number, tag: string) => {
@@ -43,7 +47,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   };
 
   return (
-    <li key={index + generateRandomId()} className={styles.line}>
+    <li key={"line" + index} className={styles.line}>
       <p className={styles.text}>{line}</p>
       <div className={styles["tag-section"]}>
         {tags.length === 0 ? null : (
@@ -52,8 +56,11 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
             {tags.map((tag: string) => (
               <span
                 className={styles.tag}
-                key={`${tag}-info-${index}-${generateRandomId()}`}
-                style={{ backgroundColor: `${getTagColor(tag, tagList, false)}`, color: `${getTagColor(tag, tagList, true)}` }}
+                key={`${tag}-info-${index}`}
+                style={{
+                  backgroundColor: `${getTagColor(tag, tagList, false)}`,
+                  color: `${getTagColor(tag, tagList, true)}`,
+                }}
               >
                 {tag}
                 <button

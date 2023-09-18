@@ -20,9 +20,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   checkDirectory,
   clearFileName,
-  saveJSON,
+  openExternalFile,
 } from "../utils/directoryFunctions";
-import { saveTagList } from "../utils/writeProjectFiles";
 
 const FileManagement: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -172,34 +171,10 @@ const FileManagement: React.FC = () => {
     }
   };
 
-  const openExternalFile = async () => {
-    try {
-      const paths = await open({
-        multiple: true,
-        filters: [{ name: "Tagger app files", extensions: ["taglist", "tdf"] }],
-      }) as string[];
-  
-      if (!paths || paths.length === 0) {
-        return;
-      }
-  
-      await Promise.all(paths.map(async (filePath: string) => {
-        const fileName: string | undefined = getFileName(filePath);
-        if (filePath.endsWith(".taglist")) {
-          const content: Tag[] = JSON.parse(await readTextFile(filePath!));
-          await saveTagList(content, fileName!);
-        }
-        if (filePath.endsWith(".tdf")) {
-          const content: LinesObject[] = JSON.parse(await readTextFile(filePath!));
-          await saveJSON(content, fileName!);
-        }
-      }));
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
-  const readFileContent = () => {};
+  const restoreBackup = () => {
+
+  }
 
   const closeProjectFilesModal = () => {
     const modal: HTMLDialogElement | null = document.querySelector(

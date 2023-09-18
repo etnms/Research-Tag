@@ -15,7 +15,7 @@ import FileSaver from "file-saver";
 import { create } from "xmlbuilder2";
 import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
 
-const ExportWindow = () => {
+const ExportWindow: React.FC = () => {
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );

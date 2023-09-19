@@ -20,10 +20,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   checkDirectory,
   clearFileName,
+  deleteFile,
   openExternalFile,
   restoreBackup,
 } from "../utils/directoryFunctions";
 import Loader from "./Loader";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { showModal } from "../utils/showModal";
 
 const FileManagement: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -51,17 +54,29 @@ const FileManagement: React.FC = () => {
     const modal: HTMLDialogElement | null = document.querySelector(
       "#file-management-dialog"
     );
+    const modalDeleteFile: HTMLDialogElement | null =
+      document.querySelector("#modal-delete-file");
     // Remove default escape behavior
-    const cancelEventHandler = (event: any) => {
+    const cancelEventHandler = (event: Event, modalName: string) => {
       event.preventDefault();
       // add close modal behavior to it
-      closeProjectFilesModal();
+      showModal(`${modalName}`, styles.show);
     };
 
-    modal?.addEventListener("cancel", cancelEventHandler);
+    modal?.addEventListener("cancel", (e) =>
+      cancelEventHandler(e, "file-management-dialog")
+    );
+    modalDeleteFile?.addEventListener("cancel", (e) =>
+      cancelEventHandler(e, "modal-delete-file")
+    );
 
     return () => {
-      modal?.removeEventListener("cancel", cancelEventHandler);
+      modal?.removeEventListener("cancel", (e) =>
+        cancelEventHandler(e, "file-management-dialog")
+      );
+      modalDeleteFile?.removeEventListener("cancel", (e) =>
+        cancelEventHandler(e, "modal-delete-file")
+      );
     };
   }, []);
 
@@ -168,18 +183,10 @@ const FileManagement: React.FC = () => {
       } else return;
       // Set local storage path
       localStorage.setItem(`last-${fileType}-file`, filePath);
-      closeProjectFilesModal();
+      showModal("file-management-dialog", styles.show);
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const closeProjectFilesModal = () => {
-    const modal: HTMLDialogElement | null = document.querySelector(
-      "#file-management-dialog"
-    );
-    modal?.close();
-    modal?.classList.remove(`${styles.show}`);
   };
 
   const handleRestoreClick = async () => {
@@ -191,6 +198,32 @@ const FileManagement: React.FC = () => {
       console.error("Error during backup restoration:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const [toDelFile, setToDelFile] = useState<string>();
+
+  const openDeleteModal = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const fileName = getFileName(
+      event.currentTarget.getAttribute("data-btn-name")!
+    );
+    setToDelFile(fileName);
+    showModal("modal-delete-file", styles.show);
+  };
+
+  const deleteFileFromProjectList = async () => {
+    try {
+      setLoading(true);
+      await deleteFile(toDelFile!, fileType!);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+      showModal("modal-delete-file", styles.show);
+      showModal("file-management-dialog", styles.show);
+      openProjectFiles(fileType!);
     }
   };
 
@@ -232,22 +265,52 @@ const FileManagement: React.FC = () => {
         </h2>
         <ul className={styles.options}>
           {listTaggerFiles?.map((file: FileEntry, index: number) => (
-            <li key={`${file}${index}`} className={styles["modal-option"]}>
+            <li
+              key={`${file}${index}-list-project`}
+              className={styles["modal-option"]}
+            >
               <button
                 onClick={() => openFile(file.path, fileType!)}
                 className={styles["btn-option"]}
               >
                 {clearFileName(file.name!)}
               </button>
+              <button
+                className={styles["remove-file-btn"]}
+                onClick={(e) => openDeleteModal(e)}
+                data-btn-name={`${file.name!}`}
+              >
+                <DeleteForeverIcon />
+              </button>
             </li>
           ))}
         </ul>
         <button
-          onClick={() => closeProjectFilesModal()}
+          onClick={() => showModal("file-management-dialog", styles.show)}
           className={styles["close-btn"]}
         >
           <CloseIcon />
         </button>
+      </dialog>
+      <dialog id="modal-delete-file" className={styles.modal}>
+        <div className={styles["delete-modal"]}>
+          <p>Are you sure you want to delete this file</p>
+          <p className={styles["delete-text"]}>{toDelFile}</p>
+          <div className={styles["container-btn"]}>
+            <button
+              onClick={() => showModal("modal-delete-file", styles.show)}
+              className={styles["btn-cancel"]}
+            >
+              Cancel
+            </button>
+            <button
+              className={styles["btn-confirm"]}
+              onClick={() => deleteFileFromProjectList()}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
       </dialog>
     </div>
   );

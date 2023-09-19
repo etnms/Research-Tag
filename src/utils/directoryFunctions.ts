@@ -5,10 +5,12 @@ import {
   writeFile,
   readTextFile,
   readBinaryFile,
+  removeFile,
 } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/dialog";
 import { getFileName } from "./getFileName";
 import JSZip from "jszip";
+import { showModal } from "./showModal";
 
 export const checkDirectory = async () => {
   try {
@@ -156,5 +158,24 @@ export const restoreBackup = async () => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const deleteFile = async (fileName: string, type: string) => {
+  if (fileName === null || undefined) return;
+  let path: string | undefined;
+
+  if (type === "project") {
+    path = `TaggerAppData/data/${fileName}.tdf`;
+  }
+  if (type === "taglist") {
+    path = `TaggerAppData/data/${fileName}.taglist`;
+  }
+  if (path === undefined) return;
+
+  await removeFile(path, { dir: BaseDirectory.Document });
+  try {
+  } catch (err) {
+    console.error(err);
   }
 };

@@ -18,6 +18,7 @@
         "readFile": true,
         "readDir": true,
         "exists": true,
+        "removeFile": true,
         "scope": [
           "$DOCUMENT/**"
         ]

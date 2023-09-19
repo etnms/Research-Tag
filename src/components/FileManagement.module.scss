@@ -65,6 +65,7 @@
 .modal-option {
   list-style: none;
   width: 50%;
+  display: flex;
 }
 
 .btn-option {
@@ -99,12 +100,69 @@
   height: 2rem;
   width: 2rem;
 }
+
 .close-btn:hover {
   background-color: variables.$deep-red-hover;
 }
 
+// Delete file modal style (everything related to the modal)
+.remove-file-btn {
+  border: none;
+  background-color: variables.$deep-red;
+  border-radius: 8px;
+  align-self: center;
+  @include mixin.flex-center;
+  padding: 0.3rem;
+  cursor: pointer;
+}
 
+.remove-file-btn > * {
+  color: white;
+}
 
+.remove-file-btn:hover {
+  scale: 1.1;
+  transition: 200ms;
+}
+
+.delete-modal {
+  margin: auto;
+  text-align: center;
+  @include mixin.flex-center;
+  flex-direction: column;
+  gap: 0.5rem
+}
+
+.delete-text {
+  font-size: 1.5rem;
+}
+.container-btn {
+  display: flex;
+  gap: 0.5rem
+}
+
+.btn-cancel,
+.btn-confirm {
+  @include mixin.button;
+}
+
+.btn-cancel {
+  background-color: #d2d2d2;
+}
+.btn-cancel:hover {
+  background-color: #a8a8a8;
+}
+
+.btn-confirm {
+  background-color: #9d4e4e;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #814040;
+}
+
+// responsiveness
 @media (max-height: 700px) {
   .container {
     height: 85%;

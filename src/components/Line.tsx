@@ -57,7 +57,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
             {tags.map((tag: string) => (
               <span
                 className={styles.tag}
-                key={`${tag}-info-${index}`}
+                key={`${tag}-info-${index}-${line}`}
                 style={{
                   backgroundColor: `${getTagColor(tag, tagList, false)}`,
                   color: `${getTagColor(tag, tagList, true)}`,

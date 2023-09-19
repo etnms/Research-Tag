@@ -10,7 +10,6 @@ import {
 import { open } from "@tauri-apps/api/dialog";
 import { getFileName } from "./getFileName";
 import JSZip from "jszip";
-import { showModal } from "./showModal";
 
 export const checkDirectory = async () => {
   try {
@@ -48,6 +47,7 @@ export const saveJSON = async (
   linesObject: LinesObject[],
   fileName: string
 ) => {
+  if (fileName === "" || null || undefined) return;
   try {
     const filePath = `TaggerAppData/data/${fileName}.tdf`;
     await writeFile(

@@ -66,7 +66,7 @@ const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
         className={styles.select}
       >
         {tagList.map((tag: Tag) => (
-          <option key={`${tag}-option-filter`}>{tag.name}</option>
+          <option key={`${tag.name}-option-filter`}>{tag.name}</option>
         ))}
       </select>
       <button

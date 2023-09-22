@@ -40,8 +40,16 @@ const CreateTag: React.FC = () => {
     const name: string = (
       document.querySelector('input[name="tag-input"]') as HTMLInputElement
     ).value;
-    const color: string = colorList[tagList.length];
-    const textColor: string = colorTextList[tagList.length];
+    let color: string;
+    let textColor: string;
+
+    colorList.length > tagList.length
+      ? (color = colorList[tagList.length])
+      : (color = colorList[tagList.length % colorList.length]);
+    colorTextList.length > tagList.length
+      ? (textColor = colorTextList[tagList.length])
+      : (textColor = colorTextList[tagList.length % colorTextList.length]);
+
     const index: number = tagList.length;
     const newTag = { name, color, textColor, index };
 

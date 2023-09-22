@@ -17,6 +17,7 @@ import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
 import Loader from "./Loader";
 
 const ExportWindow: React.FC = () => {
+  const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );
@@ -24,7 +25,6 @@ const ExportWindow: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const exportJSON = async () => {
-   
     try {
       const filePath: string | null = await save({
         filters: [
@@ -120,7 +120,6 @@ const ExportWindow: React.FC = () => {
             return zip.generateAsync({ type: "blob" });
           })
           .then(async (content) => {
-
             const contents = await content.arrayBuffer();
             await writeBinaryFile({ contents: contents, path: zipPath! });
             FileSaver.saveAs(content, "download.zip");
@@ -136,6 +135,42 @@ const ExportWindow: React.FC = () => {
     }
   };
 
+  const exportCSV = async () => {
+    setLoading(true);
+    const tags: string[] = [];
+
+    tagList.map((tag: Tag) => tags.push(tag.name));
+
+    let csvContent = "line," + tags.join(",") + "\n"; // Initialize CSV content with headers
+
+    for (const obj of linesObject) {
+      const values = tags.map((tag) => (obj.tags.includes(tag) ? "x" : "")); // Map 'x' or empty string based on tag presence
+      const objLine: string = obj.line.replace(/"/g, '""'); // Replace " with ""
+      const csvLine: string = `"${objLine}",${values.join(",")}\n`;
+      csvContent += `${csvLine}`;
+    }
+
+    try {
+      const filePath: string | null = await save({
+        filters: [
+          {
+            name: "CSV",
+            extensions: ["csv"],
+          },
+        ],
+      });
+
+      if (filePath !== null) {
+        await writeTextFile({
+          contents: csvContent,
+          path: filePath!,
+        });
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <button
@@ -148,6 +183,9 @@ const ExportWindow: React.FC = () => {
       </button>
       <button className={styles.button} onClick={() => exportXML()}>
         Export XML
+      </button>
+      <button className={styles.button} onClick={() => exportCSV()}>
+        Export CSV
       </button>
       <button className={styles.button} onClick={() => exportBackup()}>
         Backup all projects

@@ -17,7 +17,7 @@
   background-color: #f2f2f2;
   width: 80%;
   border-radius: 12px;
-  padding: 0.3rem;
+  padding: 0.2rem;
   box-shadow: variables.$elevation1;
   max-height: 60vh;
   overflow-y: auto;
@@ -25,6 +25,7 @@
 
 .tag {
   @include mixin.tag;
+  word-break: break-word;
 }
 
 .button {

@@ -16,6 +16,10 @@ Each file you open is opened as a project. You can create a taglist, with as man
 ## A work in progress
 At the moment, Research Tag is still a work in progress. There are a few features that I want to add to the software, such as an option to display tags in alphabetical order besides creation times, or being able to import .csv files.
 
+## Installation
+- Dev: Run the "npm run tauri dev" command
+- Production: Run the "npm run tauri build" command
+
 ## Stack used:
 - Tauri (rust)
 - React + Typescript

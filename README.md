@@ -1,6 +1,6 @@
-# Research Tag
+# Research Tag (desktop app)
 ## Goals of this project
-Research tab is a simple desktop app aimed at giving researches, or anyone interested, a tool to tag answers from a survey. Research tag aims at being available offline, without any account creation, and small (6mo for the entire software). Besides, the project is auto-saved.
+Research tab is a simple desktop app aimed at giving researches, or anyone interested, a tool to tag answers from a survey. Research tag aims at being available offline, without any account creation, and small (6mo for the entire software). Besides, each project is auto-saved.
 
 ## Qualitative research
 The main purpose of this software is to tag open-ended answers from a survey. Each answer appear separetely and can be tagged.

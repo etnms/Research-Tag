@@ -103,7 +103,7 @@ const ExportWindow: React.FC = () => {
       if (zipPath !== null) {
         setLoading(true);
         // Read data
-        const files: FileEntry[] = await readDir("TaggerAppData/data", {
+        const files: FileEntry[] = await readDir("ResearchTagData/data", {
           dir: BaseDirectory.Document,
         });
 

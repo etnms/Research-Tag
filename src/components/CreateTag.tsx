@@ -98,7 +98,7 @@ const CreateTag: React.FC = () => {
   const checkTagListExists = async (name: string) => {
     await checkDirectory();
     // Get list of files
-    const files: FileEntry[] = await readDir("TaggerAppData/data", {
+    const files: FileEntry[] = await readDir("ResearchTagData/data", {
       dir: BaseDirectory.Document,
       recursive: true,
     });

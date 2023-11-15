@@ -13,7 +13,7 @@ import JSZip from "jszip";
 
 export const checkDirectory = async () => {
   try {
-    const directoryExists: boolean = await exists("TaggerAppData/data", {
+    const directoryExists: boolean = await exists("ResearchTagData/data", {
       dir: BaseDirectory.Document,
     });
     if (!directoryExists) {
@@ -26,7 +26,7 @@ export const checkDirectory = async () => {
 
 const createDataFolder = async () => {
   try {
-    await createDir("TaggerAppData/data", {
+    await createDir("ResearchTagData/data", {
       dir: BaseDirectory.Document,
       recursive: true,
     });
@@ -49,7 +49,7 @@ export const saveJSON = async (
 ) => {
   if (fileName === "" || null || undefined) return;
   try {
-    const filePath = `TaggerAppData/data/${fileName}.tdf`;
+    const filePath = `ResearchTagData/data/${fileName}.tdf`;
     await writeFile(
       {
         path: filePath,
@@ -98,7 +98,7 @@ export const saveTagList = async (taglist: Tag[], name: string) => {
     await writeFile(
       {
         contents: `${JSON.stringify(taglist, null, 2)}`,
-        path: `TaggerAppData/data/${name}.taglist`,
+        path: `ResearchTagData/data/${name}.taglist`,
       },
       { dir: BaseDirectory.Document }
     );
@@ -147,7 +147,7 @@ export const restoreBackup = async () => {
           await writeFile(
             {
               contents: JSON.stringify(jsonData, null, 2), // Convert it back to formatted JSON
-              path: `TaggerAppData/data/${relativePath}`, // Specify the desired file extension as .json
+              path: `ResearchTagData/data/${relativePath}`, // Specify the desired file extension as .json
             },
             { dir: BaseDirectory.Document }
           );
@@ -166,10 +166,10 @@ export const deleteFile = async (fileName: string, type: string) => {
   let path: string | undefined;
 
   if (type === "project") {
-    path = `TaggerAppData/data/${fileName}.tdf`;
+    path = `ResearchTagData/data/${fileName}.tdf`;
   }
   if (type === "taglist") {
-    path = `TaggerAppData/data/${fileName}.taglist`;
+    path = `ResearchTagData/data/${fileName}.taglist`;
   }
   if (path === undefined) return;
 

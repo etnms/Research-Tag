@@ -15,23 +15,25 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
 
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
+  const sortedTagList = [...tagList].sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   const dispatch = useAppDispatch();
 
+  
   useEffect(() => {
     if (selectedTag === "") {
-      if (tagList.length > 0) {
-        setSelectedTag(tagList[0].name);
+      if (sortedTagList.length > 0) {
+        setSelectedTag(sortedTagList[0].name);
       }
     }
-    if (!checkTagExist(tagList, selectedTag)) {
-      if (tagList.length > 0) {
-        setSelectedTag(tagList[0].name);
+    if (!checkTagExist(sortedTagList, selectedTag)) {
+      if (sortedTagList.length > 0) {
+        setSelectedTag(sortedTagList[0].name);
       }
     }
   }, [tagList]);
 
-  const checkTagExist = (tagList: Tag[], value: string) => {
-    tagList.forEach((tag: Tag) => {
+  const checkTagExist = (sortedTagList: Tag[], value: string) => {
+    sortedTagList.forEach((tag: Tag) => {
       if (tag.name === value) return true;
     });
     return false;
@@ -59,8 +61,8 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
                 className={styles.tag}
                 key={`${tag}-info-${index}-${line}`}
                 style={{
-                  backgroundColor: `${getTagColor(tag, tagList, false)}`,
-                  color: `${getTagColor(tag, tagList, true)}`,
+                  backgroundColor: `${getTagColor(tag, sortedTagList, false)}`,
+                  color: `${getTagColor(tag, sortedTagList, true)}`,
                 }}
               >
                 {tag}
@@ -74,21 +76,21 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
             ))}
           </div>
         )}
-        {tagList.length === 0 ? null : (
+        {sortedTagList.length === 0 ? null : (
           <select
             name={`select-tag-${index}`}
             className={styles.select}
             onChange={(event) => setSelectedTag(event.target.value)}
             value={selectedTag}
           >
-            {tagList.map((tag: Tag) => (
+            {sortedTagList.map((tag: Tag) => (
               <option value={tag.name} key={`${tag.name}-option`}>
                 {tag.name}
               </option>
             ))}
           </select>
         )}
-        {tagList.length === 0 ? null : (
+        {sortedTagList.length === 0 ? null : (
           <button
             onClick={() => addTag(index, selectedTag)}
             className={styles.button}

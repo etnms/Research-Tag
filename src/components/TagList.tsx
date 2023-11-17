@@ -10,7 +10,8 @@ import { saveTagList } from "../utils/directoryFunctions";
 
 const TagList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const tagList = useAppSelector((state) => state.tagList.value);
+  const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
+  const sortedTagList: Tag[]= [...tagList].sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
   const tagListFileName = useAppSelector(
     (state) => state.fileNames.tagListFileName
   );
@@ -59,7 +60,7 @@ const TagList: React.FC = () => {
         <p className={styles.text}>Taglist is empty</p>
       ) : (
         <ul className={styles.list}>
-          {tagList.map((tag: Tag) => (
+          {sortedTagList.map((tag: Tag) => (
             <li
               key={tag.name}
               className={styles.tag}

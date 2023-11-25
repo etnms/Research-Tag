@@ -9,7 +9,7 @@ interface FilterProps {
 }
 const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
-
+  const sortedTagList: Tag[]= [...tagList].sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
   const linesObject: LinesObject[] = useAppSelector(
     (state) => state.linesObject.value
   );
@@ -19,8 +19,9 @@ const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
 
   // Update selected filter to default value
   useEffect(() => {
-    if (selectedFilter === "" && tagList.length !== 0) {
-      setSelectedFilter(tagList[0].name);
+    console.log('test')
+    if (selectedFilter === "" && sortedTagList.length !== 0) {
+      setSelectedFilter(sortedTagList[0].name);
     }
   }, []);
 
@@ -58,14 +59,14 @@ const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
       setFilteredResults(currentArray);
     }
   };
-  return tagList.length !== 0 ? (
+  return sortedTagList.length !== 0 ? (
     <div className={styles.container}>
       <h3 className={styles.title}>Filter by tag</h3>
       <select
         onChange={(event) => handleChange(event)}
         className={styles.select}
       >
-        {tagList.map((tag: Tag) => (
+        {sortedTagList.map((tag: Tag) => (
           <option key={`${tag.name}-option-filter`}>{tag.name}</option>
         ))}
       </select>
@@ -80,12 +81,12 @@ const Filter: React.FC<FilterProps> = ({ setFilteredResults }) => {
           <h4 className={styles.subtitle}>Current filters:</h4>
           <ul className={styles.list}>
             {currentFilters.map((filter: string) => (
-              <li className={styles["list-el"]}>
+              <li className={styles["list-el"]} key={`current-filter-${filter}`}>
                 <span
                   className={styles.tag}
                   style={{
-                    backgroundColor: `${getTagColor(filter, tagList, false)}`,
-                    color: `${getTagColor(filter, tagList, true)}`,
+                    backgroundColor: `${getTagColor(filter, sortedTagList, false)}`,
+                    color: `${getTagColor(filter, sortedTagList, true)}`,
                   }}
                 >
                   {filter}

@@ -10,6 +10,7 @@
   font-size: 1.2rem;
   list-style: none;
   min-height: 5vh;
+
 }
 
 .tag-section {
@@ -84,4 +85,11 @@
 .button:hover {
   background-color: variables.$secondary-hover;
   transition: 200ms;
+}
+
+
+@media (max-width: 1000px){
+  line {
+    width: 60%;
+  }
 }

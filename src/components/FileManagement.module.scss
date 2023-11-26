@@ -11,6 +11,7 @@
 .file-management-container {
   min-width: 20vw;
   padding: 0.4rem;
+  margin: auto;
 }
 
 .button-container {
@@ -19,6 +20,7 @@
   border-radius: 8px;
   padding: 0.5rem;
   box-shadow: variables.$elevation1;
+
 }
 
 .button {
@@ -160,6 +162,15 @@
 
 .btn-confirm:hover {
   background-color: #814040;
+}
+
+@media (max-width: 1000px) {
+  .file-management-container {
+    width: 30vw;
+  }
+  .button-container {
+    flex-direction: column;
+  }
 }
 
 // responsiveness

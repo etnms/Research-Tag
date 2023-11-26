@@ -55,9 +55,9 @@
         "fullscreen": false,
         "resizable": true,
         "title": "Research Tag",
-        "width": 900,
+        "width": 1050,
         "height": 600,
-        "minWidth": 900,
+        "minWidth": 1050,
         "minHeight": 600
       }
     ]

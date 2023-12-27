@@ -34,10 +34,7 @@ const FileManagement: React.FC = () => {
 
   const [fileType, setFiletype] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  // Line object for the sole purpose of updating tags that had a name change in a different project
-  const linesObject: LinesObject[] = useAppSelector(
-    (state) => state.linesObject.value
-  );
+  // Taglist for the sole purpose of updating tags that had a name change in a different project
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value)
 
   useEffect(() => {

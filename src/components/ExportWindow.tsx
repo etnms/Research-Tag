@@ -70,8 +70,8 @@ const ExportWindow: React.FC = () => {
 
         // Create a tags element and add individual tag elements
         const tagsElement: XMLBuilder = lineElement.ele("tags");
-        item.tags.forEach((tag: string) => {
-          tagsElement.ele("tag").txt(tag);
+        item.tags.forEach((tag: Tag) => {
+          tagsElement.ele("tag").txt(tag.name);
         });
       });
 
@@ -137,14 +137,14 @@ const ExportWindow: React.FC = () => {
 
   const exportCSV = async () => {
     setLoading(true);
-    const tags: string[] = [];
+    const tags: Tag[] = [];
 
-    tagList.map((tag: Tag) => tags.push(tag.name));
+    tagList.map((tag: Tag) => tags.push(tag));
 
     let csvContent = "line," + tags.join(",") + "\n"; // Initialize CSV content with headers
 
     for (const obj of linesObject) {
-      const values = tags.map((tag) => (obj.tags.includes(tag) ? "x" : "")); // Map 'x' or empty string based on tag presence
+      const values = tags.map((tag: Tag) => (obj.tags.includes(tag) ? "x" : "")); // Map 'x' or empty string based on tag presence
       const objLine: string = obj.line.replace(/"/g, '""'); // Replace " with ""
       const csvLine: string = `"${objLine}",${values.join(",")}\n`;
       csvContent += `${csvLine}`;

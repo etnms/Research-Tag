@@ -20,7 +20,7 @@ export const linesObjectSlice = createSlice({
     updateLinesObject: (state, action: PayloadAction<LinesObject[]>) => {
       state.value = action.payload;
     },
-    addTagToArray: (state, action: PayloadAction<{ index: number; tag: string }>) => {
+    addTagToArray: (state, action: PayloadAction<{ index: number; tag: Tag }>) => {
       const { index, tag } = action.payload;
       // Find the LinesObject to update by its index
       const linesObjectToUpdate = state.value.find((item) => item.index === index);
@@ -30,7 +30,7 @@ export const linesObjectSlice = createSlice({
         linesObjectToUpdate.tags = [...linesObjectToUpdate.tags, tag];
       }
     },
-    removeTagFromArray: (state, action: PayloadAction<{index: number; tagToRemove: string}>) => {
+    removeTagFromArray: (state, action: PayloadAction<{index: number; tagToRemove: Tag}>) => {
       const {index, tagToRemove} = action.payload;
       const linesObjectToUpdate = state.value.find((item) => item.index === index);
       if (linesObjectToUpdate) {

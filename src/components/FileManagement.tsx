@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./FileManagement.module.scss";
 import DisplayFile from "./DisplayFile";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { open } from "@tauri-apps/api/dialog";
 import {
   BaseDirectory,
@@ -34,6 +34,11 @@ const FileManagement: React.FC = () => {
 
   const [fileType, setFiletype] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  // Line object for the sole purpose of updating tags that had a name change in a different project
+  const linesObject: LinesObject[] = useAppSelector(
+    (state) => state.linesObject.value
+  );
+  const tagList: Tag[] = useAppSelector((state) => state.tagList.value)
 
   useEffect(() => {
     const lastProjectFileStorage: string | null =
@@ -160,7 +165,8 @@ const FileManagement: React.FC = () => {
         );
 
         // Update path and create content
-        dispatch(updateLinesObject(content));
+        //dispatch(updateLinesObject(content));
+        updateTagNames(content)
 
         // Update file name
         const newFilename = getFileName(filePath) as string;
@@ -174,6 +180,7 @@ const FileManagement: React.FC = () => {
           color: parsedObject.color,
           textColor: parsedObject.textColor,
           index: parsedObject.index,
+          id: parsedObject.id
         }));
 
         // Gather data and update tag list with data
@@ -188,6 +195,29 @@ const FileManagement: React.FC = () => {
       console.error(err);
     }
   };
+
+  const updateTagNames = (content: LinesObject[]) => {
+    const updatedLinesObject: LinesObject[] = content.map((obj) => {
+      const updatedTags: Tag[] = obj.tags.map((tag) => {
+        // Find the corresponding tag in the tagList array based on ID
+        const matchingTag = tagList.find((listTag) => listTag.id === tag.id);
+  
+        // If a matching tag is found, update the name
+        if (matchingTag && matchingTag.name !== tag.name) {
+          return { ...tag, name: matchingTag.name };
+        } else {
+          // If no matching tag is found or the names are the same, keep the original tag
+          return tag;
+        }
+      });
+  
+      // Return the updated object with the modified tags array
+      return { ...obj, tags: updatedTags };
+    });
+  
+    // Dispatch the action to update the Redux store
+    dispatch(updateLinesObject(updatedLinesObject));
+  }
 
   const handleRestoreClick = async () => {
     try {

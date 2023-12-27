@@ -2,5 +2,6 @@ interface Tag {
     name: string,
     color: string,
     textColor: string,
-    index: number
+    index: number,
+    id: string,
 }

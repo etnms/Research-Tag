@@ -7,6 +7,7 @@ import { updateTagListFileName } from "../features/fileNamesSlice";
 import { showModal } from "../utils/showModal";
 import { checkDirectory, saveTagList } from "../utils/directoryFunctions";
 import { BaseDirectory, FileEntry, readDir } from "@tauri-apps/api/fs";
+import { generateRandomId } from "../utils/createId";
 
 const CreateTag: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -51,7 +52,8 @@ const CreateTag: React.FC = () => {
       : (textColor = colorTextList[tagList.length % colorTextList.length]);
 
     const index: number = tagList.length;
-    const newTag = { name, color, textColor, index };
+    const id: string = generateRandomId(10);
+    const newTag = { name, color, textColor, index, id };
 
     // Check to see if tag already exists
     const tagExists: Tag | undefined = tagList.find(

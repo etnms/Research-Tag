@@ -7,7 +7,7 @@ import { getTagColor } from "../utils/getTagColor";
 
 interface LineProps {
   line: string;
-  tags: string[];
+  tags: Tag[];
   index: number;
 }
 
@@ -15,7 +15,7 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
 
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
-  const sortedTagList = [...tagList].sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+  const sortedTagList: Tag[] = [...tagList].sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   const dispatch = useAppDispatch();
 
   
@@ -40,12 +40,16 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
   };
 
   const addTag = (index: number, tag: string) => {
-    const tagExists = tags.find((tagItem: string) => tagItem === tag);
+    const tagExists = tags.find((tagItem: Tag) => tagItem.name === tag);
     if (tagExists) return;
-    else dispatch(addTagToArray({ index, tag }));
+    const newTag = tagList.find((tag: Tag) => tag.name === selectedTag)
+    if (newTag) {
+      // Dispatch the action with the matching Tag object
+      dispatch(addTagToArray({ index, tag: newTag }));
+    }
   };
 
-  const deleteTag = (index: number, tagToRemove: string) => {
+  const deleteTag = (index: number, tagToRemove: Tag) => {
     dispatch(removeTagFromArray({ index, tagToRemove }));
   };
 
@@ -56,16 +60,16 @@ const Line: React.FC<LineProps> = ({ line, tags, index }) => {
         {tags.length === 0 ? null : (
           <div className={styles["tag-list"]}>
             <span>Tags: </span>
-            {tags.map((tag: string) => (
+            {tags.map((tag: Tag) => (
               <span
                 className={styles.tag}
-                key={`${tag}-info-${index}-${line}`}
+                key={`${tag.name}-info-${index}-${line}`}
                 style={{
-                  backgroundColor: `${getTagColor(tag, sortedTagList, false)}`,
-                  color: `${getTagColor(tag, sortedTagList, true)}`,
+                  backgroundColor: `${getTagColor(tag.id, sortedTagList, false)}`,
+                  color: `${getTagColor(tag.id, sortedTagList, true)}`,
                 }}
               >
-                {tag}
+                {tag.name}
                 <button
                   onClick={() => deleteTag(index, tag)}
                   className={styles["delete-btn"]}

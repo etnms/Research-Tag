@@ -1,5 +1,5 @@
 interface LinesObject {
     line: string,
     index: number,
-    tags: string[]
+    tags: Tag []
 }

@@ -4,7 +4,7 @@ export const getTagColor = (
   isTextColor: boolean
 ) => {
   const matchingTag: Tag | undefined = tagList.find(
-    (tag: Tag) => tag.name === input
+    (tag: Tag) => tag.id === input
   );
   if (matchingTag) {
     if (isTextColor) return matchingTag.textColor;

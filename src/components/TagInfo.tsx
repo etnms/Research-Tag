@@ -24,13 +24,13 @@ const TagInfo: React.FC = () => {
     const newTaginfo: { [tag: string]: number } = {};
     linesObject.forEach((linesObject: LinesObject) => {
       // Iterate through the tags of each line
-      linesObject.tags.forEach((tag: string) => {
+      linesObject.tags.forEach((tag: Tag) => {
         // If the tag is already in tagInfo, increment its count by 1
-        if (newTaginfo[tag]) {
-          newTaginfo[tag]++;
+        if (newTaginfo[tag.name]) {
+          newTaginfo[tag.name]++;
         } else {
           // If the tag is not in tagInfo, initialize it with a count of 1
-          newTaginfo[tag] = 1;
+          newTaginfo[tag.name] = 1;
         }
       });
     });

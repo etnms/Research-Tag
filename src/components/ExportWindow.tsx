@@ -13,13 +13,12 @@ import {
 import JSZip from "jszip";
 import FileSaver from "file-saver";
 import { create } from "xmlbuilder2";
-import { XMLBuilder } from "xmlbuilder2/lib/interfaces";
 import Loader from "./Loader";
 
 const ExportWindow: React.FC = () => {
   const tagList: Tag[] = useAppSelector((state) => state.tagList.value);
   const linesObject: LinesObject[] = useAppSelector(
-    (state) => state.linesObject.value
+    (state) => state.linesObject.value,
   );
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,16 +59,16 @@ const ExportWindow: React.FC = () => {
         ],
       });
 
-      const root: XMLBuilder = create().ele("lines");
+      const root = create().ele("lines");
 
       // Iterate through the array and create XML elements for each item
       linesObject.forEach((item: LinesObject) => {
-        const lineElement: XMLBuilder = root.ele("line");
+        const lineElement = root.ele("line");
         lineElement.ele("content").txt(item.line);
         lineElement.ele("index").txt(item.index.toString());
 
         // Create a tags element and add individual tag elements
-        const tagsElement: XMLBuilder = lineElement.ele("tags");
+        const tagsElement = lineElement.ele("tags");
         item.tags.forEach((tag: Tag) => {
           tagsElement.ele("tag").txt(tag.name);
         });
@@ -144,7 +143,9 @@ const ExportWindow: React.FC = () => {
     let csvContent = "line," + tags.join(",") + "\n"; // Initialize CSV content with headers
 
     for (const obj of linesObject) {
-      const values = tags.map((tag: Tag) => (obj.tags.includes(tag) ? "x" : "")); // Map 'x' or empty string based on tag presence
+      const values = tags.map((tag: Tag) =>
+        obj.tags.includes(tag) ? "x" : "",
+      ); // Map 'x' or empty string based on tag presence
       const objLine: string = obj.line.replace(/"/g, '""'); // Replace " with ""
       const csvLine: string = `"${objLine}",${values.join(",")}\n`;
       csvContent += `${csvLine}`;
